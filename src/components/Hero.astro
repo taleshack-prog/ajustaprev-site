@@ -1,0 +1,227 @@
+---
+/**
+ * Hero em camadas (TDD §3.4–3.6):
+ *   z0 .hero__media  imagem + brilho     ← anima clip-path (construção de baixo para cima)
+ *   z1 .hero__scrim  degradês            ← legibilidade
+ *   z2 .hero__edge   linha de obra       ← sobe com a frente de revelação
+ *   z3 .hero__content texto              ← entra escalonado
+ * Fallback obrigatório: se a imagem falhar, .hero--no-media pinta um fundo
+ * de marca — o hero nunca fica vazio.
+ */
+import { Picture } from 'astro:assets';
+import torres from '../assets/hero-torres.png';
+---
+<section class="hero" id="hero" aria-labelledby="hero-title">
+  <div class="hero__media" aria-hidden="true">
+    <Picture
+      src={torres}
+      formats={['avif', 'webp']}
+      widths={[480, 720, 896]}
+      fallbackFormat="webp"
+      sizes="(max-width: 960px) 100vw, 60vw"
+      alt=""
+      class="hero__img"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <div class="hero__glow"></div>
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="hero__grid" aria-hidden="true"></div>
+  <div class="hero__edge" aria-hidden="true"></div>
+
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <p class="eyebrow">Defesa Empresarial Previdenciária</p>
+      <h1 id="hero-title">Previdência empresarial com <span class="hero__accent">estratégia.</span></h1>
+      <p class="lead hero__lead">
+        Auditoria, consultoria e defesa para empresas que buscam segurança, conformidade
+        e recuperação de contribuições.
+      </p>
+      <div class="hero__actions">
+        <a class="btn" href="#solucoes">Conheça as soluções <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="/contato/">Solicitar diagnóstico</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container hero__services-wrap">
+    <ul class="hero__services" role="list" aria-label="Áreas de atuação">
+      <li>Auditoria</li>
+      <li>Consultoria</li>
+      <li>Recuperação de contribuições</li>
+      <li>Defesa em autuações</li>
+      <li>Conformidade</li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative; isolation: isolate; overflow: hidden;
+    min-height: 100svh; min-height: max(100svh, 680px);
+    background: var(--night);
+    display: grid; grid-template-rows: 1fr auto;
+  }
+
+  /* z0 — mídia: ocupa ~60% à direita no desktop */
+  .hero__media {
+    position: absolute; z-index: 0; top: 0; bottom: 0; right: 0; left: 38%;
+    clip-path: inset(100% 0 0 0);
+  }
+  .hero__media :global(picture),
+  .hero__media :global(.hero__img) { width: 100%; height: 100%; }
+  .hero__media :global(.hero__img) {
+    object-fit: cover; object-position: 50% 30%;
+    transform: scale(1.06); transform-origin: 50% 100%;
+  }
+  .hero__glow {
+    position: absolute; inset: 0; opacity: 0; pointer-events: none;
+    background: radial-gradient(70% 30% at 50% 100%, rgba(106, 162, 243, 0.5) 0%, transparent 72%);
+  }
+
+  /* z1 — scrim: transição diagonal texto/imagem (proporção ~40/60) */
+  .hero__scrim {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      linear-gradient(100deg, var(--night) 0%, var(--night) 36%, rgba(10,20,36,.86) 46%, rgba(10,20,36,.42) 60%, rgba(10,20,36,.12) 78%, rgba(10,20,36,.05) 100%),
+      linear-gradient(to top, rgba(10,20,36,.95) 0%, rgba(10,20,36,0) 34%),
+      linear-gradient(to bottom, rgba(10,20,36,.7) 0%, rgba(10,20,36,0) 18%);
+  }
+  .hero__grid {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background-image: linear-gradient(to right, rgba(217,222,229,.06) 1px, transparent 1px);
+    background-size: calc(100% / 6) 100%;
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 40%, transparent 70%);
+            mask-image: linear-gradient(to right, #000 0%, #000 40%, transparent 70%);
+  }
+
+  /* z2 — linha de obra.
+     O trilho tem a altura do hero; a linha fica na base do trilho (::after).
+     Animar translateY(-100%) do trilho percorre exatamente a altura do hero
+     (o % é relativo ao próprio elemento) sem medir em JS e sem layout —
+     animar `top`, como no TDD original, gerava CLS ≈ 0,1. */
+  .hero__edge {
+    position: absolute; left: 38%; right: 0; top: 0; bottom: 0;
+    z-index: 2; opacity: 0; pointer-events: none; will-change: transform, opacity;
+  }
+  .hero__edge::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--prev) 22%, var(--prev-hi) 50%, var(--prev) 78%, transparent 100%);
+    box-shadow: 0 0 26px rgba(106,162,243,.9), 0 0 60px rgba(69,128,220,.35);
+  }
+
+  /* z3 — conteúdo */
+  .hero__inner { position: relative; z-index: 3; display: flex; align-items: center; padding-top: calc(var(--header-h) + 48px); padding-bottom: 48px; }
+  .hero__content { max-width: 600px; }
+  .hero h1 { font-size: var(--fs-display); font-weight: 600; line-height: 1.06; letter-spacing: -0.025em; margin-bottom: 28px; }
+  .hero__accent {
+    background: linear-gradient(180deg, var(--prev-hi), var(--prev) 70%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero__lead { max-width: 46ch; margin-bottom: 40px; color: #CFD5DD; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .hero__services-wrap { position: relative; z-index: 3; padding-bottom: 32px; }
+  .hero__services {
+    display: flex; flex-wrap: wrap; gap: 8px 28px; padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: 0.66rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted);
+  }
+  .hero__services li::before { content: '+'; color: var(--prev-hi); margin-right: 8px; font-weight: 400; }
+
+  /* ---------- Animação de construção ---------- */
+  .hero.is-building .hero__media { animation: heroBuild var(--dur-build) var(--ease-build) forwards; }
+  .hero.is-building .hero__media :global(.hero__img) { animation: heroSettle var(--dur-settle) var(--ease-build) forwards; }
+  .hero.is-building .hero__edge { animation: heroEdge var(--dur-build) var(--ease-build) forwards; }
+  .hero.is-building .hero__glow { animation: heroGlow var(--dur-build) var(--ease-build) forwards; }
+
+  @keyframes heroBuild { to { clip-path: inset(0 0 0 0); } }
+  @keyframes heroSettle { to { transform: scale(1); } }
+  @keyframes heroEdge {
+    0% { transform: translateY(0); opacity: 0.95; }
+    88% { transform: translateY(calc(-100% + 1px)); opacity: 0.95; }
+    100% { transform: translateY(calc(-100% + 1px)); opacity: 0; }
+  }
+  @keyframes heroGlow {
+    0% { opacity: 0; transform: translateY(18%); }
+    45% { opacity: 0.5; }
+    90% { opacity: 0.22; }
+    100% { opacity: 0; transform: translateY(-42%); }
+  }
+
+  /* Texto: escondido só quando há JS (classe .js no <html>) */
+  :global(.js) .hero__content > *, :global(.js) .hero__services { opacity: 0; transform: translateY(14px); }
+  .hero.is-ready .hero__content > *, .hero.is-ready .hero__services { animation: riseIn 900ms var(--ease-build) forwards; }
+  .hero.is-ready .hero__content > :nth-child(1) { animation-delay: 200ms; }
+  .hero.is-ready .hero__content > :nth-child(2) { animation-delay: 320ms; }
+  .hero.is-ready .hero__content > :nth-child(3) { animation-delay: 440ms; }
+  .hero.is-ready .hero__content > :nth-child(4) { animation-delay: 560ms; }
+  .hero.is-ready .hero__services { animation-delay: 900ms; }
+  @keyframes riseIn { to { opacity: 1; transform: none; } }
+
+  /* Sem JS a imagem precisa aparecer: o clip só existe com .js */
+  :global(html:not(.js)) .hero__media { clip-path: none; }
+  :global(html:not(.js)) .hero__media :global(.hero__img) { transform: none; }
+
+  /* Fallback de mídia */
+  .hero.hero--no-media .hero__media, .hero.hero--no-media .hero__edge { display: none; }
+  .hero.hero--no-media {
+    background:
+      radial-gradient(60% 70% at 78% 60%, rgba(69,128,220,.22) 0%, transparent 70%),
+      radial-gradient(120% 90% at 78% 100%, var(--night-2) 0%, var(--night) 62%),
+      linear-gradient(160deg, var(--night) 0%, var(--brand-steel) 58%, var(--brand-graphite) 100%);
+  }
+
+  /* ---------- Responsivo ---------- */
+  @media (max-width: 960px) {
+    .hero { min-height: auto; }
+    .hero__media, .hero__edge { left: 0; }
+    .hero__media :global(.hero__img) { object-position: 50% 22%; }
+    .hero__scrim {
+      background: linear-gradient(to bottom, rgba(10,20,36,.55) 0%, rgba(10,20,36,.25) 18%, rgba(10,20,36,.55) 36%, rgba(10,20,36,.9) 54%, var(--night) 72%);
+    }
+    .hero__grid { display: none; }
+    /* Torres visíveis no terço superior; texto ancorado embaixo. */
+    .hero__inner { padding-top: calc(var(--header-h) + 160px); padding-bottom: 32px; min-height: min(760px, 100svh); align-items: flex-end; }
+  }
+  @media (max-width: 520px) {
+    .hero__actions .btn { width: 100%; }
+  }
+
+  /* ---------- Movimento reduzido ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__media { clip-path: none !important; animation: none !important; }
+    .hero__media :global(.hero__img) { transform: none !important; animation: none !important; }
+    .hero__edge, .hero__glow { display: none !important; }
+    :global(.js) .hero__content > *, :global(.js) .hero__services { opacity: 1 !important; transform: none !important; animation: none !important; }
+  }
+</style>
+
+<script>
+  const hero = document.getElementById('hero');
+  if (hero) {
+    const img = hero.querySelector<HTMLImageElement>('.hero__img');
+    const fail = () => hero.classList.add('hero--no-media');
+    if (!img) fail();
+    else if (img.complete && img.naturalWidth === 0) fail(); // falhou antes do script rodar
+    else img.addEventListener('error', fail, { once: true });
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const start = () => hero.classList.add('is-building', 'is-ready');
+
+    if (reduce) {
+      hero.classList.add('is-ready');
+    } else {
+      // Começa quando a imagem decodifica (sem "construir" um vazio) ou em 700ms.
+      let started = false;
+      const go = () => { if (!started) { started = true; start(); } };
+      if (img && !img.complete) {
+        img.addEventListener('load', go, { once: true });
+        img.addEventListener('error', go, { once: true });
+      } else go();
+      setTimeout(go, 700);
+    }
+  }
+</script>

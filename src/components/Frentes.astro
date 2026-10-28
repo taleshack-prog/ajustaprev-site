@@ -1,0 +1,64 @@
+---
+import { FRENTES } from '../data/content';
+---
+<section class="section section--alt frentes" id="solucoes" aria-labelledby="frentes-title">
+  <div class="gridlines" aria-hidden="true"></div>
+  <div class="container">
+    <div class="section-head section-head--split" data-reveal>
+      <div>
+        <span class="eyebrow">Soluções</span>
+        <h2 id="frentes-title">Atuação em quatro frentes.</h2>
+        <p>
+          Folha, contencioso, enquadramento e risco tratados de forma integrada — porque uma decisão
+          sobre afastamento repercute no FAP, e um enquadramento repercute em toda a folha.
+        </p>
+      </div>
+    </div>
+
+    <div class="frentes__grid">
+      {FRENTES.map((f, i) => (
+        <article class="frente" data-reveal style={`transition-delay:${i * 70}ms`}>
+          <div class="frente__top">
+            <span class="frente__n">{f.numero}</span>
+            <span class="tag">Frente {f.numero}</span>
+          </div>
+          <h3><a href={`/solucoes/${f.slug}/`} class="frente__link">{f.titulo}</a></h3>
+          <p>{f.resumo}</p>
+          <ul role="list" class="frente__steps">
+            {f.etapas.map((e) => <li>{e.titulo}</li>)}
+          </ul>
+          <span class="frente__more" aria-hidden="true">Ver detalhes <span>→</span></span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .frentes__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .frente {
+    position: relative; display: flex; flex-direction: column;
+    padding: clamp(28px, 3.4vw, 44px); background: var(--brand-steel);
+    border: 1px solid var(--line); border-radius: var(--radius);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+  .frente:hover, .frente:focus-within { border-color: rgba(106, 162, 243, 0.55); background: #22406A; }
+  .frente__top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; }
+  .frente__n { font-size: 3.4rem; font-weight: 300; line-height: 0.9; letter-spacing: -0.04em; color: transparent; -webkit-text-stroke: 1px rgba(106,162,243,.6); }
+  .frente h3 { font-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem); margin-bottom: 14px; }
+  .frente__link { text-decoration: none; color: inherit; }
+  /* área clicável = card inteiro, mantendo um único link acessível */
+  .frente__link::after { content: ''; position: absolute; inset: 0; }
+  .frente__link:focus-visible { outline: none; }
+  .frente:has(.frente__link:focus-visible) { outline: 2px solid var(--focus); outline-offset: 3px; }
+  .frente p { font-weight: 300; font-size: 0.97rem; line-height: 1.75; margin-bottom: 24px; }
+  .frente__steps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .frente__steps li {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.04em; color: var(--text-strong);
+    padding: 6px 12px; border: 1px solid var(--line-strong); border-radius: 999px;
+  }
+  .frente__more { margin-top: auto; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--link); }
+  .frente__more span { display: inline-block; transition: transform 0.25s ease; }
+  .frente:hover .frente__more span { transform: translateX(4px); }
+  @media (max-width: 860px) { .frentes__grid { grid-template-columns: 1fr; } }
+</style>

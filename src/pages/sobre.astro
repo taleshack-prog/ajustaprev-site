@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaFinal from '../components/CtaFinal.astro';
+import { SITE } from '../data/site';
+import { breadcrumbs } from '../lib/schema';
+
+const crumbs = [{ name: 'Início', url: '/' }, { name: 'Sobre', url: '/sobre/' }];
+const principios = [
+  { t: 'Visão econômica', d: 'Não basta encontrar uma discussão jurídica. É preciso demonstrar impacto, recorrência, risco e retorno.' },
+  { t: 'Visão integrada', d: 'Uma decisão sobre afastamento repercute no FAP; um enquadramento repercute na folha; uma falha documental pode virar passivo.' },
+  { t: 'Foco empresarial', d: 'A estratégia precisa caber na operação, ser auditável e conversar com diretoria, RH, financeiro, contabilidade e jurídico.' },
+];
+const valores = ['Estratégia', 'Técnica', 'Segurança', 'Conformidade', 'Resultados'];
+---
+<Base title="Sobre" description="A AJUSTAPREV atua em direito empresarial previdenciário com foco em custo, risco e conformidade da folha." schema={[breadcrumbs(crumbs)]}>
+  <PageHeader
+    eyebrow="Sobre"
+    title="O ajuste certo. A contribuição justa."
+    lead="O custo previdenciário nasce da interseção entre folha, tributação, benefícios, acidentes, RH e contencioso. A AJUSTAPREV trabalha nessa interseção."
+    crumbs={crumbs}
+  />
+
+  <section class="section">
+    <div class="container sobre">
+      <div class="prose" data-reveal>
+        <p>
+          A AJUSTAPREV nasceu para tratar a carga previdenciária das empresas como o que ela é: um custo
+          recorrente, que se repete em toda competência, e um risco que se acumula silenciosamente até virar
+          autuação, ação regressiva ou índice acidentário elevado.
+        </p>
+        <p>
+          O trabalho parte sempre dos dados da própria empresa — eSocial, DCTFWeb, extratos do FAP, registros de
+          afastamento — e chega à diretoria como business case: quanto custa hoje, o que pode mudar, com qual risco
+          e em que ordem. A empresa decide com números antes de avançar.
+        </p>
+        <p>
+          O objetivo é simples: <strong>pagar corretamente, recuperar o que for possível e reduzir risco.</strong>
+        </p>
+      </div>
+      <ul role="list" class="valores" aria-label="Princípios da marca" data-reveal>
+        {valores.map((v) => <li>{v}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="p-title">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">Como pensamos</span><h2 id="p-title">Por que uma atuação dedicada.</h2></div>
+      <div class="grid grid--3">
+        {principios.map((p, i) => (
+          <article class="card" data-reveal style={`transition-delay:${i * 80}ms`}>
+            <h3>{p.t}</h3>
+            <p>{p.d}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {(SITE.legal.responsibleName || SITE.legal.society) && (
+    <section class="section" aria-labelledby="resp-title">
+      <div class="container">
+        <h2 id="resp-title" class="resp__h">Responsabilidade técnica</h2>
+        <p>
+          {SITE.legal.society}{SITE.legal.society && SITE.legal.responsibleName && ' — '}
+          {SITE.legal.responsibleName}{SITE.legal.oab && `, ${SITE.legal.oab}`}
+        </p>
+      </div>
+    </section>
+  )}
+
+  <CtaFinal />
+</Base>
+
+<style>
+  .sobre { display: grid; grid-template-columns: 1.6fr 1fr; gap: clamp(40px, 7vw, 112px); align-items: start; }
+  .valores { border-top: 1px solid var(--line-strong); }
+  .valores li { padding: 18px 0; border-bottom: 1px solid var(--line); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--text-strong); }
+  .valores li::before { content: ''; display: inline-block; width: 18px; height: 1px; background: var(--rule); vertical-align: middle; margin-right: 14px; }
+  .resp__h { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+  @media (max-width: 900px) { .sobre { grid-template-columns: 1fr; } }
+</style>

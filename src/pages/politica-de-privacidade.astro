@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { SITE } from '../data/site';
+const crumbs = [{ name: 'Início', url: '/' }, { name: 'Política de privacidade', url: '/politica-de-privacidade/' }];
+const email = SITE.contact.email;
+const atualizado = '28 de outubro de 2026';
+---
+<Base title="Política de privacidade" description="Como o site da AJUSTAPREV trata dados pessoais, em conformidade com a LGPD (Lei nº 13.709/2018).">
+  <PageHeader eyebrow="Institucional" title="Política de privacidade" lead={`Última atualização: ${atualizado}.`} crumbs={crumbs} />
+  <section class="section">
+    <div class="container">
+      <div class="prose">
+        <p>
+          Esta política descreve como o site da {SITE.name} trata dados pessoais, nos termos da Lei Geral de Proteção
+          de Dados Pessoais (Lei nº 13.709/2018 — LGPD).
+        </p>
+
+        <h2>1. Dados coletados pelo site</h2>
+        <p>
+          <strong>Este site não coleta, armazena nem transmite dados pessoais a servidores próprios.</strong> O
+          formulário de contato apenas monta uma mensagem e abre o aplicativo de e-mail do próprio visitante, que
+          decide se envia ou não.
+        </p>
+        <p>
+          Os dados enviados por e-mail (nome, cargo, empresa, e-mail, faixa de folha e mensagem) são usados
+          exclusivamente para responder à solicitação, com base no consentimento do titular e em procedimentos
+          preliminares relacionados a contrato (LGPD, art. 7º, I e V).
+        </p>
+
+        <h2>2. Cookies e rastreamento</h2>
+        <p>
+          Esta versão do site não utiliza cookies de rastreamento, pixels de publicidade nem ferramentas de
+          analytics de terceiros. As fontes tipográficas são servidas pelo próprio domínio, sem requisições a
+          serviços externos. Se isso mudar, esta política será atualizada antes da alteração.
+        </p>
+
+        <h2>3. Hospedagem</h2>
+        <p>
+          O provedor de hospedagem pode registrar, por razões de segurança e operação, dados técnicos de acesso
+          (como endereço IP e data/hora), conforme a sua própria política e o Marco Civil da Internet
+          (Lei nº 12.965/2014, art. 15).
+        </p>
+
+        <h2>4. Retenção</h2>
+        <p>
+          Mensagens recebidas por e-mail são mantidas pelo tempo necessário ao atendimento e, depois, apenas quando
+          houver obrigação legal ou relação contratual que o justifique.
+        </p>
+
+        <h2>5. Direitos do titular</h2>
+        <p>
+          O titular pode solicitar confirmação de tratamento, acesso, correção, anonimização, eliminação e
+          informações sobre compartilhamento (LGPD, art. 18){email ? <>, pelo e-mail <a href={`mailto:${email}`}>{email}</a></> : ''}.
+        </p>
+
+        <h2>6. Alterações</h2>
+        <p>Esta política pode ser atualizada. A data da última revisão aparece no topo da página.</p>
+      </div>
+    </div>
+  </section>
+</Base>

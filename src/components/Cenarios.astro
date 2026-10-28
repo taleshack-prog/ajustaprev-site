@@ -1,0 +1,147 @@
+---
+import { CENARIOS } from '../data/content';
+
+const compact = (v: number) =>
+  v >= 1_000_000
+    ? `R$ ${(v / 1_000_000).toLocaleString('pt-BR', { maximumFractionDigits: 2 })} mi`
+    : `R$ ${(v / 1_000).toLocaleString('pt-BR', { maximumFractionDigits: 0 })} mil`;
+---
+<section class="section section--deep cenarios" aria-labelledby="cenarios-title">
+  <div class="dots" style="--dots-x: 50%; --dots-y: 40%" aria-hidden="true"></div>
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">A conta da recorrência</span>
+      <h2 id="cenarios-title">Pequenas diferenças percentuais, repetidas todo mês.</h2>
+      <p>
+        Três contas abertas mostram como uma diferença de base ou de alíquota se acumula em
+        doze competências. São aritmética, não estimativa de resultado.
+      </p>
+    </div>
+
+    <div class="cenarios__grid">
+      {CENARIOS.map((c, i) => (
+        <article class="cen" data-reveal style={`transition-delay:${i * 80}ms`}>
+          <p class="cen__label">{c.rotulo}</p>
+          <p class="cen__value"><span class="visually-hidden">Efeito em 12 meses: </span>{compact(c.anual)}<small>/ano</small></p>
+          <p class="cen__calc">
+            {c.baseTxt} × {c.efeitoTxt} × 12
+          </p>
+          <p class="cen__note">{c.nota}</p>
+        </article>
+      ))}
+    </div>
+
+    <!-- Simulador: alíquota efetiva RAT × FAP. Sem JS, a seção acima já informa. -->
+    <div class="sim" data-reveal data-sim hidden>
+      <div class="sim__head">
+        <span class="eyebrow">Simulador</span>
+        <h3>Quanto pesa o FAP na sua folha?</h3>
+        <p class="muted">A alíquota efetiva é o RAT multiplicado pelo FAP. Ajuste os valores para ver o efeito anual.</p>
+      </div>
+      <form class="sim__form" onsubmit="return false" aria-describedby="sim-note">
+        <div class="field">
+          <label for="sim-folha">Folha mensal (R$)</label>
+          <input class="input" id="sim-folha" name="folha" type="text" inputmode="numeric" value="3.000.000" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="sim-rat">Alíquota RAT</label>
+          <select class="input" id="sim-rat" name="rat">
+            <option value="0.01">1% — risco leve</option>
+            <option value="0.02" selected>2% — risco médio</option>
+            <option value="0.03">3% — risco grave</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="sim-fap">FAP do estabelecimento: <output id="sim-fap-out" for="sim-fap">1,2500</output></label>
+          <input id="sim-fap" name="fap" type="range" min="0.5" max="2" step="0.0001" value="1.25" class="sim__range" />
+          <span class="hint" aria-hidden="true"><span>0,5000</span><span>2,0000</span></span>
+        </div>
+      </form>
+      <dl class="sim__out" aria-live="polite">
+        <div><dt>Alíquota efetiva</dt><dd data-out="aliq">2,50%</dd></div>
+        <div><dt>Custo anual RAT × FAP</dt><dd data-out="anual">—</dd></div>
+        <div><dt>Cada 0,1 de FAP vale</dt><dd data-out="passo">—</dd></div>
+      </dl>
+      <p class="sim__note" id="sim-note">
+        Cálculo simplificado sobre 12 competências; não inclui 13º salário nem demais contribuições.
+        O FAP é calculado por estabelecimento e divulgado anualmente pelo governo federal.
+      </p>
+    </div>
+
+    <p class="cenarios__disclaimer">
+      * Exemplos hipotéticos. Não representam promessa de economia, crédito ou resultado; a viabilidade
+      de qualquer medida depende de análise técnica e documental individualizada.
+    </p>
+  </div>
+</section>
+
+<style>
+  .cenarios__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cen {
+    position: relative; padding: clamp(28px, 3vw, 40px); background: rgba(14, 28, 49, 0.82);
+    border: 1px solid var(--line); border-radius: var(--radius);
+    -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  }
+  .cen::before { content: ''; position: absolute; top: -1px; left: -1px; width: 48px; height: 2px; background: var(--rule); }
+  .cen__label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--link); margin-bottom: 18px; }
+  .cen__value { white-space: nowrap; font-size: clamp(2.1rem, 1.5rem + 1.6vw, 2.9rem); font-weight: 300; line-height: 1; letter-spacing: -0.03em; color: var(--text-strong); margin-bottom: 20px; font-variant-numeric: tabular-nums; }
+  .cen__value small { font-size: 0.32em; font-weight: 500; letter-spacing: 0.06em; color: var(--text-muted); margin-left: 6px; }
+  .cen__calc { font-size: 0.86rem; font-weight: 500; color: var(--text-strong); padding: 12px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+  .cen__note { font-size: 0.86rem; font-weight: 300; color: var(--text-muted); }
+
+  .sim { margin-top: 48px; padding: clamp(28px, 3.4vw, 48px); border: 1px solid var(--line-strong); border-radius: var(--radius); background: linear-gradient(135deg, rgba(31,59,91,.55), rgba(10,20,36,.7)); display: grid; grid-template-columns: 1fr 1fr; gap: 32px 48px; }
+  .sim__head { grid-column: 1 / -1; }
+  .sim__head h3 { font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem); margin-bottom: 8px; }
+  .sim__head p { font-size: 0.95rem; font-weight: 300; }
+  .sim__form { display: grid; gap: 22px; }
+  .sim__range { width: 100%; accent-color: var(--prev-hi); height: 28px; }
+  .sim__form .hint { display: flex; justify-content: space-between; }
+  .sim__form output { color: var(--link); font-variant-numeric: tabular-nums; }
+  .sim__out { display: grid; gap: 0; align-content: start; border-top: 1px solid var(--line); }
+  .sim__out > div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .sim__out dt { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+  .sim__out dd { margin: 0; font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.9rem); font-weight: 300; color: var(--text-strong); font-variant-numeric: tabular-nums; text-align: right; }
+  .sim__note { grid-column: 1 / -1; font-size: 0.8rem; font-weight: 300; color: var(--text-muted); }
+
+  .cenarios__disclaimer { margin-top: 32px; font-size: 0.8rem; font-weight: 300; color: var(--text-muted); max-width: 80ch; }
+
+  @media (max-width: 900px) {
+    .cenarios__grid { grid-template-columns: 1fr; }
+    .sim { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-sim]');
+  if (root) {
+    root.hidden = false; // simulador só aparece com JS
+    const folha = root.querySelector<HTMLInputElement>('#sim-folha')!;
+    const rat = root.querySelector<HTMLSelectElement>('#sim-rat')!;
+    const fap = root.querySelector<HTMLInputElement>('#sim-fap')!;
+    const fapOut = root.querySelector<HTMLOutputElement>('#sim-fap-out')!;
+    const out = (k: string) => root.querySelector<HTMLElement>(`[data-out="${k}"]`)!;
+
+    const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+    const pct = new Intl.NumberFormat('pt-BR', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const dec4 = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    const int = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 });
+
+    const parseBRL = (s: string) => Number(s.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+
+    const render = () => {
+      const base = parseBRL(folha.value);
+      const r = Number(rat.value);
+      const f = Number(fap.value);
+      fapOut.value = dec4.format(f);
+      out('aliq').textContent = pct.format(r * f);
+      out('anual').textContent = brl.format(base * r * f * 12);
+      out('passo').textContent = brl.format(base * r * 0.1 * 12) + '/ano';
+    };
+
+    folha.addEventListener('input', render);
+    folha.addEventListener('blur', () => { folha.value = int.format(parseBRL(folha.value)); });
+    rat.addEventListener('change', render);
+    fap.addEventListener('input', render);
+    render();
+  }
+</script>

@@ -1,0 +1,44 @@
+---
+import { SITE } from '../data/site';
+import Icon from './Icon.astro';
+interface Props { title?: string; text?: string }
+const {
+  title = 'Quanto custa não revisar?',
+  text = 'Em empresas com folha relevante, pequenas distorções percentuais se transformam em valores altos quando repetidas mês após mês. O ponto de partida é um diagnóstico executivo e confidencial.',
+} = Astro.props;
+---
+<section class="cta-final" aria-labelledby="cta-title">
+  <div class="dots" style="--dots-x: 78%; --dots-y: 50%" aria-hidden="true"></div>
+  <div class="container cta-final__inner">
+    <div data-reveal>
+      <span class="eyebrow">Próximo passo</span>
+      <h2 id="cta-title">{title}</h2>
+      <span class="rule" aria-hidden="true"></span>
+      <p class="lead">{text}</p>
+    </div>
+    <div class="cta-final__box" data-reveal>
+      <ul role="list" class="cta-final__list">
+        <li><Icon name="lock" size={20} /> Sob acordo de confidencialidade</li>
+        <li><Icon name="gear" size={20} /> Sem interferir na rotina do DP</li>
+        <li><Icon name="carga" size={20} /> Números antes de qualquer decisão</li>
+      </ul>
+      <a href="/contato/" class="btn">Solicitar diagnóstico <span class="arrow" aria-hidden="true">→</span></a>
+      {SITE.contact.email && (
+        <a class="link cta-final__mail" href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-final { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--brand-deep) 0%, var(--night) 70%); padding-block: var(--space-section); border-top: 1px solid var(--line); }
+  .cta-final__inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+  .cta-final h2 { font-size: clamp(2rem, 1.4rem + 2.4vw, 3.2rem); }
+  .cta-final .lead { max-width: 52ch; }
+  .cta-final__box { padding: clamp(28px, 3vw, 40px); border: 1px solid var(--line-strong); background: rgba(10, 20, 36, 0.72); border-radius: var(--radius); display: grid; gap: 24px; }
+  .cta-final__list { display: grid; gap: 14px; font-size: 0.95rem; color: var(--text-strong); }
+  .cta-final__list li { display: flex; align-items: center; gap: 12px; }
+  .cta-final__list :global(svg) { color: var(--prev-hi); flex: none; }
+  .cta-final__mail { justify-self: start; font-size: 0.92rem; }
+  @media (max-width: 860px) { .cta-final__inner { grid-template-columns: 1fr; } }
+</style>

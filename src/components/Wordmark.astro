@@ -1,0 +1,49 @@
+---
+/**
+ * Logotipo AJUSTAPREV em SVG inline (gerado por scripts/build-wordmark.py).
+ * Inline evita requisição extra e mantém nitidez em qualquer densidade.
+ */
+import wm from '../assets/wordmark.json';
+
+interface Props {
+  /** Exibe "Defesa Empresarial Previdenciária" abaixo do logotipo. */
+  tagline?: boolean;
+  /** Prefixo único para os ids dos degradês (mais de um logo por página). */
+  id?: string;
+  class?: string;
+  label?: string;
+}
+const { tagline = false, id = 'wm', class: cls = '', label = 'AJUSTAPREV' } = Astro.props;
+const s = `${id}-s`;
+const b = `${id}-b`;
+---
+<span class:list={['wordmark', cls]}>
+  <svg viewBox={wm.viewBox} role="img" aria-label={label} focusable="false">
+    <defs>
+      <linearGradient id={s} x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0" stop-color="#F4F6F9" />
+        <stop offset=".55" stop-color="#B9C0CA" />
+        <stop offset="1" stop-color="#E3E7EC" />
+      </linearGradient>
+      <linearGradient id={b} x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0" stop-color="#6AA2F3" />
+        <stop offset="1" stop-color="#2A66C6" />
+      </linearGradient>
+    </defs>
+    <g transform={`translate(0 ${wm.capH}) scale(1 -1)`}>
+      <g fill={`url(#${s})`} set:html={wm.silver} />
+      <g fill={`url(#${b})`} set:html={wm.blue} />
+    </g>
+  </svg>
+  {tagline && <span class="wordmark__tag" aria-hidden="true">Defesa Empresarial Previdenciária</span>}
+</span>
+
+<style>
+  .wordmark { display: inline-flex; flex-direction: column; gap: 8px; line-height: 1; }
+  .wordmark svg { width: 100%; height: auto; display: block; }
+  /* Degradê com y invertido: o grupo usa scale(1 -1) (coordenadas da fonte). */
+  .wordmark__tag {
+    font-size: 0.52em; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase;
+    color: rgba(217, 222, 229, 0.72); white-space: nowrap;
+  }
+</style>

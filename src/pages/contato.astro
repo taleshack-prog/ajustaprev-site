@@ -1,0 +1,186 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../data/site';
+import { breadcrumbs } from '../lib/schema';
+
+const crumbs = [{ name: 'Início', url: '/' }, { name: 'Contato', url: '/contato/' }];
+const to = SITE.contact.email;
+---
+<Base
+  title="Solicitar diagnóstico"
+  description="Solicite um diagnóstico executivo e confidencial da carga previdenciária da sua empresa."
+  schema={[breadcrumbs(crumbs)]}
+>
+  <PageHeader
+    eyebrow="Contato"
+    title="Diagnóstico executivo e confidencial."
+    lead="Conte brevemente o contexto da empresa. O retorno indica os documentos necessários e o escopo do diagnóstico."
+    crumbs={crumbs}
+  />
+
+  <section class="section">
+    <div class="container contato">
+      <!--
+        LGPD: o formulário não envia dados a servidor nem os armazena.
+        Ao enviar, abre o cliente de e-mail do visitante com a mensagem preenchida.
+      -->
+      <form class="form" novalidate data-contact-form data-to={to} aria-describedby="form-note">
+        <div class="form__row">
+          <div class="field">
+            <label for="f-nome">Nome *</label>
+            <input class="input" id="f-nome" name="nome" autocomplete="name" required minlength="2" aria-describedby="e-nome" />
+            <span class="field-error" id="e-nome"></span>
+          </div>
+          <div class="field">
+            <label for="f-cargo">Cargo</label>
+            <input class="input" id="f-cargo" name="cargo" autocomplete="organization-title" />
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for="f-empresa">Empresa *</label>
+            <input class="input" id="f-empresa" name="empresa" autocomplete="organization" required minlength="2" aria-describedby="e-empresa" />
+            <span class="field-error" id="e-empresa"></span>
+          </div>
+          <div class="field">
+            <label for="f-email">E-mail corporativo *</label>
+            <input class="input" id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email" />
+            <span class="field-error" id="e-email"></span>
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for="f-folha">Faixa de folha mensal *</label>
+            <select class="input" id="f-folha" name="folha" required aria-describedby="e-folha">
+              <option value="">Selecione</option>
+              <option>Até R$ 500 mil</option>
+              <option>De R$ 500 mil a R$ 2 milhões</option>
+              <option>De R$ 2 milhões a R$ 10 milhões</option>
+              <option>Acima de R$ 10 milhões</option>
+            </select>
+            <span class="field-error" id="e-folha"></span>
+          </div>
+          <div class="field">
+            <label for="f-tema">Tema principal</label>
+            <select class="input" id="f-tema" name="tema">
+              <option>Revisão da folha</option>
+              <option>SAT / RAT</option>
+              <option>FAP e afastamentos</option>
+              <option>Discussão judicial</option>
+              <option>Due diligence</option>
+              <option>Outro</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-msg">Contexto</label>
+          <textarea class="input" id="f-msg" name="mensagem" rows="5" maxlength="2000" placeholder="Número de estabelecimentos, situação atual, prazo, dúvidas."></textarea>
+          <span class="hint">Não inclua dados pessoais de empregados.</span>
+        </div>
+        <label class="check">
+          <input type="checkbox" name="consent" required aria-describedby="e-consent" />
+          <span>Concordo com o uso destes dados exclusivamente para retorno a esta solicitação, conforme a <a class="link" href="/politica-de-privacidade/">política de privacidade</a>. *</span>
+        </label>
+        <span class="field-error" id="e-consent"></span>
+
+        <div class="form__actions">
+          <button type="submit" class="btn">Enviar solicitação <span class="arrow" aria-hidden="true">→</span></button>
+          <p id="form-note" class="form__note">Ao enviar, seu aplicativo de e-mail abre com a mensagem pronta. Nenhum dado fica armazenado neste site.</p>
+        </div>
+        <p class="form__status" role="status" data-form-status></p>
+      </form>
+
+      <aside class="contato__side" aria-label="Outras formas de contato">
+        <div class="contato__box">
+          <h2>Contato direto</h2>
+          <ul role="list">
+            {to && <li><Icon name="mail" size={20} /><a class="link" href={`mailto:${to}`}>{to}</a></li>}
+            {SITE.contact.phone && SITE.contact.phoneHref && <li><a class="link" href={`tel:${SITE.contact.phoneHref}`}>{SITE.contact.phone}</a></li>}
+          </ul>
+        </div>
+        <div class="contato__box">
+          <h2>O que acontece depois</h2>
+          <ol role="list" class="contato__steps">
+            <li>Retorno com a lista de documentos para o escopo indicado.</li>
+            <li>Acordo de confidencialidade antes do envio dos dados.</li>
+            <li>Diagnóstico com impacto, risco e prioridades.</li>
+          </ol>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contato { display: grid; grid-template-columns: 1.6fr 1fr; gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .form { display: grid; gap: 22px; }
+  .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .form__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-top: 8px; }
+  .form__note { font-size: 0.82rem; font-weight: 300; color: var(--text-muted); max-width: 46ch; }
+  .form__status { font-size: 0.92rem; color: var(--ok); min-height: 1.4em; }
+  .contato__side { display: grid; gap: 16px; }
+  .contato__box { padding: 28px; border: 1px solid var(--line); background: var(--brand-deep); }
+  .contato__box h2 { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 18px; }
+  .contato__box ul li { display: flex; align-items: center; gap: 12px; }
+  .contato__box :global(svg) { color: var(--prev-hi); }
+  .contato__steps { counter-reset: s; display: grid; gap: 14px; font-size: 0.92rem; font-weight: 300; }
+  .contato__steps li { counter-increment: s; display: grid; grid-template-columns: 28px 1fr; }
+  .contato__steps li::before { content: counter(s, decimal-leading-zero); color: var(--link); font-weight: 600; font-size: 0.78rem; padding-top: 3px; }
+  @media (max-width: 900px) { .contato { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .form__row { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-form-status]')!;
+    const to = form.dataset.to ?? '';
+    const msgs: Record<string, string> = {
+      nome: 'Informe seu nome.',
+      empresa: 'Informe a empresa.',
+      email: 'Informe um e-mail válido.',
+      folha: 'Selecione a faixa de folha.',
+      consent: 'É necessário concordar para enviar.',
+    };
+    const errEl = (name: string) => form.querySelector<HTMLElement>(`#e-${name}`);
+
+    const validate = (el: HTMLInputElement | HTMLSelectElement) => {
+      const out = errEl(el.name);
+      const ok = el.checkValidity();
+      el.setAttribute('aria-invalid', String(!ok));
+      if (out) out.textContent = ok ? '' : msgs[el.name] ?? 'Campo obrigatório.';
+      return ok;
+    };
+
+    form.querySelectorAll<HTMLInputElement>('[required]').forEach((el) =>
+      el.addEventListener('blur', () => el.value && validate(el)),
+    );
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const required = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[required]')];
+      const invalid = required.filter((el) => !validate(el));
+      if (invalid.length) {
+        invalid[0].focus();
+        status.textContent = '';
+        return;
+      }
+      const d = new FormData(form);
+      const v = (k: string) => String(d.get(k) ?? '').trim();
+      const subject = `Diagnóstico previdenciário — ${v('empresa')}`;
+      const body = [
+        `Nome: ${v('nome')}`,
+        v('cargo') && `Cargo: ${v('cargo')}`,
+        `Empresa: ${v('empresa')}`,
+        `E-mail: ${v('email')}`,
+        `Faixa de folha mensal: ${v('folha')}`,
+        `Tema: ${v('tema')}`,
+        v('mensagem') && `\nContexto:\n${v('mensagem')}`,
+      ].filter(Boolean).join('\n');
+      window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      status.textContent = 'Seu aplicativo de e-mail foi aberto com a mensagem pronta. Basta enviar.';
+    });
+  }
+</script>

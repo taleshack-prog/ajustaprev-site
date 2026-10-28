@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Dores from '../components/Dores.astro';
+import Frentes from '../components/Frentes.astro';
+import Cenarios from '../components/Cenarios.astro';
+import Metodo from '../components/Metodo.astro';
+import BlogTeaser from '../components/BlogTeaser.astro';
+import Faq from '../components/Faq.astro';
+import CtaFinal from '../components/CtaFinal.astro';
+import { SITE } from '../data/site';
+import { FAQ } from '../data/content';
+import { faqPage } from '../lib/schema';
+---
+<Base title={SITE.name} schema={[faqPage(FAQ, '/')]}>
+  <Hero />
+
+  <!-- Bloco de resposta direta: definição extraível por buscadores e motores de IA -->
+  <section class="definicao" aria-label="O que é a AJUSTAPREV">
+    <div class="container definicao__inner">
+      <p>
+        <strong>A AJUSTAPREV atua em direito empresarial previdenciário:</strong> revisa a folha e os recolhimentos
+        das empresas, valida o enquadramento do SAT/RAT, administra o risco de afastamentos e do FAP e conduz a
+        recuperação de contribuições pagas a maior — sempre com o impacto financeiro medido antes da decisão.
+      </p>
+    </div>
+  </section>
+
+  <Dores />
+  <Frentes />
+  <Cenarios />
+  <Metodo />
+  <BlogTeaser />
+  <Faq items={FAQ} />
+  <CtaFinal />
+</Base>
+
+<style>
+  .definicao { background: var(--night); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .definicao__inner { padding-block: clamp(32px, 4vw, 48px); }
+  .definicao p { max-width: 92ch; font-size: clamp(1rem, 0.96rem + 0.3vw, 1.15rem); font-weight: 300; line-height: 1.75; }
+</style>

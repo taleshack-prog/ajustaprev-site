@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PostCard from '../../components/PostCard.astro';
+import CtaFinal from '../../components/CtaFinal.astro';
+import Icon from '../../components/Icon.astro';
+import { getPosts } from '../../lib/blog';
+import { CATEGORIAS } from '../../data/categorias';
+import { breadcrumbs } from '../../lib/schema';
+
+const posts = await getPosts();
+const usadas = CATEGORIAS.filter((c) => posts.some((p) => p.data.category === c));
+const crumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Conteúdo', url: '/blog/' },
+];
+---
+<Base
+  title="Conteúdo técnico"
+  description="Artigos sobre contribuição previdenciária patronal, folha, SAT/RAT, FAP, afastamentos e due diligence previdenciária."
+  schema={[breadcrumbs(crumbs)]}
+>
+  <PageHeader
+    eyebrow="Conteúdo técnico"
+    title="Custeio previdenciário, sem ruído."
+    lead="Análises objetivas para quem decide sobre a folha: o que a norma diz, onde o erro costuma estar e como verificar."
+    crumbs={crumbs}
+  />
+
+  <section class="section blog" aria-label="Artigos">
+    <div class="container">
+      <div class="blog__tools" data-blog-tools hidden>
+        <div class="blog__search">
+          <label for="blog-q" class="visually-hidden">Buscar artigos</label>
+          <Icon name="search" size={18} />
+          <input id="blog-q" class="input" type="search" placeholder="Buscar por tema, norma ou palavra-chave" autocomplete="off" />
+        </div>
+        <div class="blog__filters" role="group" aria-label="Filtrar por categoria">
+          <button type="button" class="chip" aria-pressed="true" data-cat="">Todos</button>
+          {usadas.map((c) => <button type="button" class="chip" aria-pressed="false" data-cat={c}>{c}</button>)}
+        </div>
+      </div>
+
+      <p class="blog__count muted" aria-live="polite" data-blog-count>{posts.length} artigos</p>
+
+      <ul role="list" class="grid grid--3 blog__list" data-blog-list>
+        {posts.map((p) => <li><PostCard post={p} headingLevel="h2" /></li>)}
+      </ul>
+      <p class="blog__empty" data-blog-empty hidden>Nenhum artigo encontrado para esse filtro.</p>
+    </div>
+  </section>
+
+  <CtaFinal />
+</Base>
+
+<style>
+  .blog__tools { display: flex; flex-wrap: wrap; gap: 16px 24px; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .blog__search { position: relative; flex: 1 1 320px; max-width: 460px; }
+  .blog__search :global(svg) { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+  .blog__search .input { padding-left: 46px; }
+  .blog__filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    min-height: 44px; padding: 0 18px; border-radius: 999px;
+    background: transparent; border: 1px solid var(--line-strong); color: var(--text);
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .chip:hover { border-color: var(--prev-hi); color: var(--text-strong); }
+  .chip[aria-pressed='true'] { background: var(--cta); border-color: var(--cta); color: #fff; }
+  .blog__count { font-size: 0.85rem; margin-bottom: 20px; }
+  .blog__list > li[hidden] { display: none; }
+  .blog__empty { padding: 48px 0; text-align: center; color: var(--text-muted); }
+</style>
+
+<script>
+  const tools = document.querySelector<HTMLElement>('[data-blog-tools]');
+  const list = document.querySelector<HTMLElement>('[data-blog-list]');
+  const count = document.querySelector<HTMLElement>('[data-blog-count]');
+  const empty = document.querySelector<HTMLElement>('[data-blog-empty]');
+  if (tools && list && count && empty) {
+    tools.hidden = false; // busca e filtros só existem com JS; sem JS, a lista completa já está visível
+    const q = tools.querySelector<HTMLInputElement>('#blog-q')!;
+    const chips = [...tools.querySelectorAll<HTMLButtonElement>('[data-cat]')];
+    const items = [...list.querySelectorAll<HTMLLIElement>(':scope > li')];
+    const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+    let cat = new URLSearchParams(location.search).get('categoria') ?? '';
+    const apply = () => {
+      const term = norm(q.value.trim());
+      let n = 0;
+      for (const li of items) {
+        const card = li.querySelector<HTMLElement>('[data-category]')!;
+        const ok = (!cat || card.dataset.category === cat) && (!term || norm(card.dataset.search ?? '').includes(term));
+        li.hidden = !ok;
+        if (ok) n++;
+      }
+      chips.forEach((c) => c.setAttribute('aria-pressed', String((c.dataset.cat ?? '') === cat)));
+      count.textContent = n === 1 ? '1 artigo' : `${n} artigos`;
+      empty.hidden = n > 0;
+    };
+    chips.forEach((c) =>
+      c.addEventListener('click', () => {
+        cat = c.dataset.cat ?? '';
+        const url = new URL(location.href);
+        cat ? url.searchParams.set('categoria', cat) : url.searchParams.delete('categoria');
+        history.replaceState(null, '', url);
+        apply();
+      }),
+    );
+    q.addEventListener('input', apply);
+    apply();
+  }
+</script>

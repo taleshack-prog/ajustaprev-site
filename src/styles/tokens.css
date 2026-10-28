@@ -1,0 +1,79 @@
+/*
+ * AJUSTAPREV — design tokens
+ *
+ * Duas fontes de cor, documentadas separadamente:
+ *
+ * 1) BRAND BOOK (rótulos impressos na prancha de identidade)
+ *    O TDD anterior registrava #0F245F e #1F385B — leitura errada dos rótulos.
+ *    Os valores corretos da prancha são #0F243F e #1F3B5B.
+ *
+ * 2) PEÇAS FINAIS (amostragem de pixels do logo master 4000×2250 e do post FAP)
+ *    O logo e o post usam um azul mais vivo que o "Azul Claro" do brand book
+ *    e um fundo mais escuro que o "Azul Profundo". O site segue as peças finais
+ *    para que marca, redes e site tenham a mesma cor na tela.
+ *
+ * Contraste (WCAG 2.1) medido sobre --night (#0A1424):
+ *   --text #C4CBD4 11,3:1 · --text-muted #8A99AE 6,4:1 · --link #71A5F3 7,4:1
+ *   CTA: branco sobre --cta #2A66C6 5,5:1
+ *   --brand-blue #4F7FB3 = 3,7:1 → só em elementos não textuais (linhas, ícones, bordas).
+ */
+:root {
+  /* 1. Brand book */
+  --brand-deep: #0F243F;      /* Azul Profundo */
+  --brand-steel: #1F3B5B;     /* Azul Aço */
+  --brand-blue: #4F7FB3;      /* Azul Claro */
+  --brand-graphite: #3A4250;  /* Grafite */
+  --brand-grey: #D9DEE5;      /* Cinza Claro */
+  --white: #FFFFFF;
+
+  /* 2. Peças finais (amostrado) */
+  --abyss: #05090F;           /* base do post FAP */
+  --night: #0A1424;           /* fundo do logo master */
+  --night-2: #0E1C31;         /* segundo tom do logo master */
+  --prev: #4580DC;            /* média do "PREV" no logo */
+  --prev-hi: #6AA2F3;         /* topo do degradê do "PREV" */
+  --prev-lo: #2A66C6;         /* base do degradê do "PREV" */
+  --rule: #397AD7;            /* fio azul do post */
+  --silver: #CFD4DA;          /* prata do "AJUSTA" */
+
+  /* Papéis semânticos */
+  --bg: var(--night);
+  --bg-alt: var(--brand-deep);
+  --bg-deep: var(--abyss);
+  --surface: var(--brand-steel);
+  --surface-2: #16304E;
+  --text: #C4CBD4;            /* corpo sobre escuro (amostrado do post) */
+  --text-strong: var(--white);
+  --text-muted: #8A99AE;
+  --link: #71A5F3;            /* eyebrow do post */
+  --cta: var(--prev-lo);
+  --cta-hover: #2459B0;
+  --line: rgba(217, 222, 229, 0.12);
+  --line-strong: rgba(217, 222, 229, 0.22);
+  --focus: var(--prev-hi);
+  --ok: #4ADE80;
+  --error: #F87171;
+
+  /* Tipografia — Montserrat em tudo (decisão: alinhar ao logo e ao post) */
+  --font: 'Montserrat Variable', 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-display: clamp(2.25rem, 1.4rem + 3.4vw, 4rem);
+  --fs-h1: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  --fs-h2: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem);
+  --fs-h3: clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
+  --fs-body: 1.0625rem;
+  --fs-small: 0.875rem;
+  --fs-micro: 0.72rem;
+  --track-micro: 0.26em;
+
+  /* Espaço e forma */
+  --gutter: clamp(20px, 5vw, 64px);
+  --space-section: clamp(72px, 9vw, 128px);
+  --maxw: 1200px;
+  --radius: 2px;
+  --header-h: 72px;
+
+  /* Movimento */
+  --ease-build: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-build: 2800ms;
+  --dur-settle: 3400ms;
+}

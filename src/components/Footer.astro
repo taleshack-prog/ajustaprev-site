@@ -1,0 +1,91 @@
+---
+import Wordmark from './Wordmark.astro';
+import { SITE, NAV } from '../data/site';
+import { FRENTES } from '../data/content';
+
+const year = new Date().getFullYear();
+const legal = SITE.legal;
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a href="/" aria-label="AJUSTAPREV — página inicial" class="site-footer__logo">
+          <Wordmark id="wm-foot" />
+        </a>
+        <p class="site-footer__tag">Defesa Empresarial Previdenciária</p>
+        <p class="site-footer__claim">{SITE.claim}</p>
+      </div>
+
+      <nav aria-label="Soluções" class="site-footer__col">
+        <p class="site-footer__h">Soluções</p>
+        <ul role="list">
+          {FRENTES.map((f) => <li><a href={`/solucoes/${f.slug}/`}>{f.curto}</a></li>)}
+        </ul>
+      </nav>
+
+      <nav aria-label="Institucional" class="site-footer__col">
+        <p class="site-footer__h">Institucional</p>
+        <ul role="list">
+          {NAV.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href="/contato/">Contato</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-footer__col">
+        <p class="site-footer__h">Contato</p>
+        <ul role="list">
+          {SITE.contact.email && <li><a href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a></li>}
+          {SITE.contact.phone && SITE.contact.phoneHref && <li><a href={`tel:${SITE.contact.phoneHref}`}>{SITE.contact.phone}</a></li>}
+          {SITE.contact.city && <li>{SITE.contact.city}</li>}
+          <li><a href="/contato/">Solicitar diagnóstico</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__legal">
+      <p>
+        Conteúdo de caráter exclusivamente informativo, em observância ao Provimento nº 205/2021 do Conselho Federal da OAB.
+        Não constitui parecer jurídico, não promete resultado e não substitui a análise do caso concreto.
+      </p>
+      {(legal.responsibleName || legal.society) && (
+        <p>
+          {legal.society && <>{legal.society}{legal.cnpj && <> · CNPJ {legal.cnpj}</>}. </>}
+          {legal.responsibleName && <>Responsável técnico: {legal.responsibleName}{legal.oab && <> — {legal.oab}</>}.</>}
+        </p>
+      )}
+    </div>
+
+    <div class="site-footer__bottom">
+      <p>© {year} {SITE.name}. Todos os direitos reservados.</p>
+      <ul role="list">
+        <li><a href="/aviso-juridico/">Aviso jurídico</a></li>
+        <li><a href="/politica-de-privacidade/">Privacidade</a></li>
+        <li class="site-footer__maint">Site mantido por {SITE.maintainer}</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { position: relative; background: var(--abyss); border-top: 1px solid var(--line); padding: clamp(56px, 7vw, 88px) 0 32px; font-size: 0.9rem; overflow: hidden; }
+  .site-footer__top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; padding-bottom: 48px; border-bottom: 1px solid var(--line); }
+  .site-footer__logo { display: block; width: 210px; }
+  .site-footer__tag { margin-top: 12px; font-size: 0.62rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); }
+  .site-footer__claim { margin-top: 24px; font-weight: 300; color: var(--text); max-width: 28ch; }
+  .site-footer__h { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-strong); margin-bottom: 18px; }
+  .site-footer ul { display: grid; gap: 10px; }
+  .site-footer a { color: var(--text); text-decoration: none; transition: color 0.2s ease; }
+  .site-footer a:hover { color: var(--link); }
+  .site-footer__legal { padding: 28px 0; border-bottom: 1px solid var(--line); display: grid; gap: 8px; }
+  .site-footer__legal p { font-size: 0.8rem; font-weight: 300; line-height: 1.7; color: var(--text-muted); max-width: 90ch; }
+  .site-footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding-top: 24px; font-size: 0.78rem; color: var(--text-muted); }
+  .site-footer__bottom ul { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .site-footer__bottom a { color: var(--text-muted); }
+  .site-footer__maint { color: var(--text-muted); }
+  @media (max-width: 900px) {
+    .site-footer__top { grid-template-columns: 1fr 1fr; }
+    .site-footer__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 520px) { .site-footer__top { grid-template-columns: 1fr; } }
+</style>

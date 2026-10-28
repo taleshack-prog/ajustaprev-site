@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Página não encontrada" noindex>
+  <section class="nf">
+    <div class="dots" aria-hidden="true"></div>
+    <div class="container nf__inner">
+      <span class="eyebrow">Erro 404</span>
+      <h1>Esta página não existe.</h1>
+      <p class="lead">O endereço pode ter mudado. Os caminhos abaixo levam ao conteúdo principal.</p>
+      <div class="nf__actions">
+        <a class="btn" href="/">Página inicial</a>
+        <a class="btn btn--ghost" href="/blog/">Conteúdo técnico</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { position: relative; min-height: 80vh; display: grid; align-items: center; padding: calc(var(--header-h) + 64px) 0 80px; overflow: hidden; }
+  .nf__inner { position: relative; z-index: 1; }
+  .nf h1 { margin-bottom: 16px; }
+  .nf__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+</style>

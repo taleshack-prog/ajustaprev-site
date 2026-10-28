@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { SITE } from '../data/site';
+const crumbs = [{ name: 'Início', url: '/' }, { name: 'Aviso jurídico', url: '/aviso-juridico/' }];
+---
+<Base title="Aviso jurídico" description="Natureza informativa do conteúdo publicado no site da AJUSTAPREV.">
+  <PageHeader eyebrow="Institucional" title="Aviso jurídico" crumbs={crumbs} />
+  <section class="section">
+    <div class="container">
+      <div class="prose">
+        <p>
+          O conteúdo deste site tem caráter exclusivamente informativo e educativo, em observância ao
+          Provimento nº 205/2021 do Conselho Federal da Ordem dos Advogados do Brasil e ao Código de Ética e
+          Disciplina da OAB.
+        </p>
+        <h2>Não constitui parecer</h2>
+        <p>
+          Os textos, exemplos e simulações publicados não constituem parecer jurídico, consultoria individualizada
+          ou recomendação de conduta. A aplicação de qualquer norma ao caso concreto depende da análise da
+          documentação da empresa por profissional habilitado.
+        </p>
+        <h2>Exemplos e simulações</h2>
+        <p>
+          Os valores apresentados em cenários e no simulador são hipotéticos e servem apenas para ilustrar a
+          aritmética de alíquotas e bases de cálculo. Não representam promessa, estimativa ou garantia de economia,
+          crédito ou resultado.
+        </p>
+        <h2>Atualidade das informações</h2>
+        <p>
+          A legislação previdenciária e a jurisprudência mudam com frequência. Cada artigo indica sua data de
+          publicação e as fontes normativas utilizadas; informações podem ter sido alteradas após essa data.
+        </p>
+        <h2>Contato pelo site</h2>
+        <p>
+          O envio de mensagem por este site não estabelece relação contratual nem vínculo profissional. Informações
+          confidenciais não devem ser enviadas antes da formalização de acordo de confidencialidade.
+        </p>
+        {SITE.legal.responsibleName && (
+          <>
+            <h2>Responsabilidade técnica</h2>
+            <p>{SITE.legal.society && `${SITE.legal.society} — `}{SITE.legal.responsibleName}{SITE.legal.oab && `, ${SITE.legal.oab}`}.</p>
+          </>
+        )}
+      </div>
+    </div>
+  </section>
+</Base>

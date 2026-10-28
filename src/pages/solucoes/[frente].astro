@@ -1,0 +1,119 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Faq from '../../components/Faq.astro';
+import CtaFinal from '../../components/CtaFinal.astro';
+import PostCard from '../../components/PostCard.astro';
+import { FRENTES, type Frente } from '../../data/content';
+import { service, breadcrumbs, faqPage } from '../../lib/schema';
+import { getPosts } from '../../lib/blog';
+
+export function getStaticPaths() {
+  return FRENTES.map((f) => ({ params: { frente: f.slug }, props: { f } }));
+}
+interface Props { f: Frente }
+const { f } = Astro.props;
+const url = `/solucoes/${f.slug}/`;
+const outras = FRENTES.filter((x) => x.slug !== f.slug);
+
+const categoriaPorFrente: Record<string, string[]> = {
+  'consultoria-folha': ['Folha', 'Governança'],
+  'discussao-judicial': ['Judicial', 'Folha'],
+  'sat-rat': ['SAT/RAT'],
+  'gestao-de-risco': ['Risco'],
+};
+const artigos = (await getPosts()).filter((p) => categoriaPorFrente[f.slug]?.includes(p.data.category)).slice(0, 2);
+
+const crumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Soluções', url: '/#solucoes' },
+  { name: f.curto, url },
+];
+---
+<Base
+  title={f.titulo}
+  description={f.resumo}
+  schema={[service(f), breadcrumbs(crumbs), faqPage(f.perguntas, url)]}
+>
+  <PageHeader eyebrow={`Frente ${f.numero}`} title={f.titulo} lead={f.resumo} crumbs={crumbs} />
+
+  <section class="section">
+    <div class="container fr">
+      <div class="fr__obj" data-reveal>
+        <span class="eyebrow">Objetivo</span>
+        <p class="fr__obj-t">{f.objetivo}</p>
+        <span class="rule" aria-hidden="true"></span>
+        <h2 class="fr__h">Para quem</h2>
+        <ul role="list" class="fr__pq">{f.paraQuem.map((p) => <li>{p}</li>)}</ul>
+      </div>
+
+      <div>
+        <h2 class="visually-hidden">Etapas</h2>
+        <ol role="list" class="fr__steps">
+          {f.etapas.map((e, i) => (
+            <li class="fr__step" data-reveal style={`transition-delay:${i * 80}ms`}>
+              <span class="fr__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{e.titulo}</h3>
+                <p>{e.texto}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p class="fr__entrega" data-reveal><strong>Resultado esperado.</strong> {f.entrega}</p>
+      </div>
+    </div>
+  </section>
+
+  {artigos.length > 0 && (
+    <section class="section section--deep" aria-labelledby="art-title">
+      <div class="container">
+        <div class="section-head"><span class="eyebrow">Leitura relacionada</span><h2 id="art-title">Do blog</h2></div>
+        <ul role="list" class="grid grid--2">{artigos.map((p) => <li><PostCard post={p} /></li>)}</ul>
+      </div>
+    </section>
+  )}
+
+  <Faq items={f.perguntas} title="Dúvidas sobre esta frente" eyebrow={f.curto} />
+
+  <section class="section outras" aria-labelledby="outras-title">
+    <div class="container">
+      <h2 id="outras-title" class="outras__h">Outras frentes</h2>
+      <ul role="list" class="outras__list">
+        {outras.map((o) => (
+          <li><a href={`/solucoes/${o.slug}/`}><span>{o.numero}</span>{o.titulo}<span aria-hidden="true" class="outras__arrow">→</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaFinal />
+</Base>
+
+<style>
+  .fr { display: grid; grid-template-columns: 1fr 1.5fr; gap: clamp(40px, 7vw, 112px); align-items: start; }
+  .fr__obj { position: sticky; top: calc(var(--header-h) + 32px); }
+  .fr__obj-t { font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.6rem); font-weight: 400; line-height: 1.45; color: var(--text-strong); }
+  .fr__h { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+  .fr__pq { display: grid; gap: 8px; }
+  .fr__pq li::before { content: '+'; color: var(--prev-hi); margin-right: 10px; }
+  .fr__steps { border-top: 1px solid var(--line-strong); }
+  .fr__step { display: grid; grid-template-columns: 64px 1fr; gap: 16px; padding: 32px 0; border-bottom: 1px solid var(--line); }
+  .fr__n { font-size: 2rem; font-weight: 300; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(106,162,243,.7); }
+  .fr__step h3 { margin-bottom: 8px; }
+  .fr__step p { font-weight: 300; }
+  .fr__entrega { margin-top: 32px; padding: 20px 24px; background: var(--brand-steel); border-left: 2px solid var(--rule); font-weight: 300; }
+
+  .outras { border-top: 1px solid var(--line); padding-block: clamp(56px, 6vw, 80px); }
+  .outras__h { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px; }
+  .outras__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .outras__list a { display: flex; align-items: baseline; gap: 14px; height: 100%; padding: 22px 24px; border: 1px solid var(--line); text-decoration: none; color: var(--text-strong); font-weight: 500; transition: border-color .2s ease; }
+  .outras__list a:hover { border-color: var(--prev-hi); }
+  .outras__list a > span:first-child { color: var(--link); font-size: 0.78rem; font-weight: 600; }
+  .outras__arrow { margin-left: auto; color: var(--link); }
+  @media (max-width: 900px) {
+    .fr { grid-template-columns: 1fr; }
+    .fr__obj { position: static; }
+    .outras__list { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+import { METODO, PUBLICO } from '../data/content';
+---
+<section class="section metodo" id="metodo" aria-labelledby="metodo-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Como o projeto funciona</span>
+      <h2 id="metodo-title">A empresa decide com números antes de avançar.</h2>
+      <p>
+        Cinco etapas, com uma regra: nada é implementado sem business case aprovado pela diretoria.
+      </p>
+    </div>
+
+    <ol class="steps" role="list">
+      {METODO.map((m, i) => (
+        <li class="step" data-reveal style={`transition-delay:${i * 90}ms`}>
+          <span class="step__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <span class="step__dot" aria-hidden="true"></span>
+          <h3>{m.titulo}</h3>
+          <p>{m.texto}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="publico" data-reveal>
+      <div class="publico__head">
+        <span class="eyebrow">Para quem</span>
+        <h3>Quatro interlocutores, uma mesma base de dados.</h3>
+      </div>
+      <div class="publico__table" role="table" aria-label="Perfis atendidos">
+        <div class="publico__row publico__row--head" role="row">
+          <span role="columnheader">Perfil</span>
+          <span role="columnheader">Dor central</span>
+          <span role="columnheader">O que recebe</span>
+        </div>
+        {PUBLICO.map((p) => (
+          <div class="publico__row" role="row">
+            <span role="cell" class="publico__perfil">{p.perfil}</span>
+            <span role="cell">{p.dor}</span>
+            <span role="cell" class="publico__ve">{p.ve}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .metodo { background: var(--night); border-top: 1px solid var(--line); }
+  .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; position: relative; }
+  .steps::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 46px; height: 1px;
+    background: linear-gradient(90deg, var(--rule), rgba(57,122,215,.15));
+  }
+  .step { position: relative; padding-right: 24px; }
+  .step__n { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 18px; }
+  .step__dot { position: relative; display: block; width: 11px; height: 11px; border: 1px solid var(--prev-hi); background: var(--night); transform: rotate(45deg); margin: 0 0 28px 0; }
+  .step:first-child .step__dot { background: var(--prev-hi); }
+  .step h3 { font-size: 1.05rem; margin-bottom: 10px; }
+  .step p { font-size: 0.92rem; font-weight: 300; line-height: 1.7; }
+
+  .publico { margin-top: clamp(64px, 8vw, 104px); display: grid; grid-template-columns: 1fr 2fr; gap: 48px; align-items: start; }
+  .publico__head h3 { font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem); line-height: 1.2; }
+  .publico__table { border-top: 1px solid var(--line-strong); }
+  .publico__row { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); font-size: 0.95rem; font-weight: 300; }
+  .publico__row--head { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); padding: 14px 0; }
+  .publico__perfil { color: var(--text-strong); font-weight: 600; }
+  .publico__ve { color: var(--link); font-weight: 500; }
+
+  @media (max-width: 1000px) {
+    .steps { grid-template-columns: 1fr; gap: 0; }
+    .steps::before { left: 5px; right: auto; top: 8px; bottom: 8px; width: 1px; height: auto; background: linear-gradient(180deg, var(--rule), rgba(57,122,215,.15)); }
+    .step { display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; padding: 0 0 32px; }
+    .step__dot { grid-row: 1 / span 3; grid-column: 1; margin: 6px 0 0 0; }
+    .step__n, .step h3, .step p { grid-column: 2; }
+    .step__n { margin-bottom: 6px; }
+    .publico { grid-template-columns: 1fr; gap: 24px; }
+  }
+  @media (max-width: 600px) {
+    .publico__row { grid-template-columns: 1fr; gap: 4px; }
+    .publico__row--head { display: none; }
+  }
+</style>

@@ -1,0 +1,135 @@
+---
+import { render } from 'astro:content';
+import { Picture } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PostCard from '../../components/PostCard.astro';
+import Icon from '../../components/Icon.astro';
+import { getPosts, postUrl, readingTime, wordCount, formatDate, type Post } from '../../lib/blog';
+import { blogPosting, breadcrumbs } from '../../lib/schema';
+import { FRENTES } from '../../data/content';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, all: posts } }));
+}
+
+interface Props { post: Post; all: Post[] }
+const { post, all } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const url = postUrl(post);
+
+const relacionados = all.filter((p) => p.id !== post.id && p.data.category === d.category)
+  .concat(all.filter((p) => p.id !== post.id && p.data.category !== d.category))
+  .slice(0, 3);
+
+// Frente relacionada para o CTA contextual
+const frentePorCategoria: Record<string, string> = {
+  Folha: 'consultoria-folha', Judicial: 'discussao-judicial', 'SAT/RAT': 'sat-rat', Risco: 'gestao-de-risco', Governança: 'consultoria-folha',
+};
+const frente = FRENTES.find((f) => f.slug === frentePorCategoria[d.category]);
+
+const crumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Conteúdo', url: '/blog/' },
+  { name: d.title, url },
+];
+---
+<Base
+  title={d.title}
+  description={d.description}
+  type="article"
+  publishedTime={d.date}
+  canonical={d.canonical}
+  image={d.cover ? undefined : '/assets/og-home.jpg'}
+  schema={[
+    blogPosting({ title: d.title, description: d.description, url, date: d.date, updated: d.updated, author: d.author, category: d.category, words: wordCount(post.body) }),
+    breadcrumbs(crumbs),
+  ]}
+>
+  <PageHeader eyebrow={d.category} title={d.title} lead={d.description} crumbs={crumbs}>
+    <div class="art-meta">
+      <span>{d.author}</span>
+      <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time>
+      {d.updated && <span>Atualizado em <time datetime={d.updated.toISOString()}>{formatDate(d.updated)}</time></span>}
+      <span><Icon name="clock" size={15} /> {readingTime(post.body)} min de leitura</span>
+    </div>
+  </PageHeader>
+
+  <div class="section art">
+    <div class="container art__grid">
+      <article class="art__body">
+        {d.cover && (
+          <figure class="art__cover">
+            <Picture src={d.cover} fallbackFormat="webp" alt={d.coverAlt ?? ''} widths={[400, 640, 860]} sizes="(max-width: 860px) 100vw, 640px" formats={['avif', 'webp']} />
+          </figure>
+        )}
+        <div class="prose">
+          <Content />
+        </div>
+
+        {d.fontes.length > 0 && (
+          <section class="art__fontes" aria-labelledby="fontes-title">
+            <h2 id="fontes-title">Fontes</h2>
+            <ul role="list">
+              {d.fontes.map((f) => (
+                <li>{f.url ? <a href={f.url} rel="noopener" target="_blank">{f.titulo}<span class="visually-hidden"> (abre em nova aba)</span></a> : f.titulo}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <aside class="art__aviso" aria-label="Aviso">
+          Este conteúdo tem caráter informativo e não constitui parecer jurídico. A aplicação ao caso concreto
+          depende de análise individualizada da documentação da empresa.
+        </aside>
+      </article>
+
+      <aside class="art__side" aria-label="Próximo passo">
+        <div class="art__cta">
+          <span class="eyebrow">Próximo passo</span>
+          {frente && <p class="art__cta-t">{frente.titulo}</p>}
+          <p>{frente ? frente.objetivo : 'Diagnóstico executivo e confidencial da folha.'}</p>
+          {frente && <a class="link" href={`/solucoes/${frente.slug}/`}>Como funciona →</a>}
+          <a class="btn btn--sm" href="/contato/">Solicitar diagnóstico</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  {relacionados.length > 0 && (
+    <section class="section section--alt" aria-labelledby="rel-title">
+      <div class="container">
+        <div class="section-head"><h2 id="rel-title">Leia também</h2></div>
+        <ul role="list" class="grid grid--3">
+          {relacionados.map((p) => <li><PostCard post={p} /></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .art-meta { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 28px; font-size: 0.82rem; color: var(--text-muted); }
+  .art-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .art { padding-top: clamp(48px, 6vw, 80px); }
+  .art__grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .art__cover { margin: 0 0 40px; max-width: 640px; }
+  .art__cover :global(img) { width: 100%; border: 1px solid var(--line); }
+  .art__fontes { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); max-width: 70ch; }
+  .art__fontes h2 { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 16px; }
+  .art__fontes ul { display: grid; gap: 10px; font-size: 0.9rem; font-weight: 300; }
+  .art__fontes a { color: var(--link); text-underline-offset: 3px; }
+  .art__aviso { margin-top: 32px; max-width: 70ch; padding: 18px 20px; border-left: 2px solid var(--brand-blue); background: rgba(31,59,91,.35); font-size: 0.86rem; font-weight: 300; color: var(--text); }
+  .art__side { position: sticky; top: calc(var(--header-h) + 32px); }
+  .art__cta { display: grid; gap: 14px; padding: 28px; border: 1px solid var(--line-strong); background: var(--brand-deep); border-radius: var(--radius); }
+  .art__cta .eyebrow { margin-bottom: 0; }
+  .art__cta-t { color: var(--text-strong); font-weight: 600; line-height: 1.35; }
+  .art__cta p { font-size: 0.92rem; font-weight: 300; }
+  .art__cta .btn { margin-top: 6px; }
+  @media (max-width: 960px) {
+    .art__grid { grid-template-columns: 1fr; }
+    .art__side { position: static; }
+  }
+</style>
