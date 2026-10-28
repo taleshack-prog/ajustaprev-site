@@ -1,45 +1,37 @@
 /**
- * Configuração central do site. Tudo o que pode mudar antes de publicar
- * está aqui — e scripts/prepublish-check.mjs verifica os itens pendentes.
- *
- * `null` = pendente. Campos nulos não são exibidos no site.
+ * Configuração central do site. Os valores vivem em site.json, editável pelo
+ * painel (/admin → Site → Configurações). Campos vazios ('') viram null aqui
+ * e não são exibidos. scripts/prepublish-check.mjs aponta o que falta.
  */
+import raw from './site.json';
+
+const val = (v: string | null | undefined) => (v && v.trim() ? v.trim() : null);
+
 export const SITE = {
-  name: 'AJUSTAPREV',
-  tagline: 'Defesa Empresarial Previdenciária',
-  claim: 'O ajuste certo. A contribuição justa.',
-  url: 'https://www.ajustaprev.com.br', // PENDENTE: confirmar DNS
+  name: raw.name,
+  tagline: raw.tagline,
+  claim: raw.claim,
+  url: raw.url.replace(/\/$/, ''),
   locale: 'pt-BR',
-  description:
-    'Auditoria, consultoria e defesa previdenciária para empresas: folha, SAT/RAT, FAP, afastamentos e recuperação de contribuições.',
-
+  description: raw.description,
   contact: {
-    email: 'luiz@ajustaprev.com.br' as string | null, // PENDENTE: confirmar (veio do cartão)
-    phone: null as string | null, // PENDENTE: o cartão traz placeholder (61) 99999-9999
-    phoneHref: null as string | null, // ex.: '+5561XXXXXXXXX'
-    city: null as string | null,
+    email: val(raw.contact.email),
+    phone: val(raw.contact.phone),
+    phoneHref: val(raw.contact.phoneHref),
+    city: val(raw.contact.city),
   },
-
-  /** Quem mantém e responde pelo site. */
-  maintainer: 'Hack Tech Farm',
-
-  /**
-   * Identificação profissional exigida quando a comunicação for de advocacia
-   * (Provimento CFOAB nº 205/2021). Preencher antes de publicar se o serviço
-   * for prestado por advogado ou sociedade de advogados.
-   */
+  maintainer: raw.maintainer,
   legal: {
-    responsibleName: null as string | null,
-    oab: null as string | null, // ex.: 'OAB/DF 00.000'
-    society: null as string | null, // razão social + registro na OAB, se houver
-    cnpj: null as string | null,
+    responsibleName: val(raw.legal.responsibleName),
+    oab: val(raw.legal.oab),
+    society: val(raw.legal.society),
+    cnpj: val(raw.legal.cnpj),
   },
-
   social: {
-    linkedin: null as string | null,
-    instagram: null as string | null,
+    linkedin: val(raw.social.linkedin),
+    instagram: val(raw.social.instagram),
   },
-} as const;
+};
 
 export const NAV = [
   { href: '/#solucoes', label: 'Soluções' },

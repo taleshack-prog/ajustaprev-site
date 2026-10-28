@@ -1,5 +1,6 @@
 ---
-import { CENARIOS } from '../data/content';
+import { CENARIOS, HOME } from '../data/content';
+const t = HOME.cenarios;
 
 const compact = (v: number) =>
   v >= 1_000_000
@@ -10,12 +11,9 @@ const compact = (v: number) =>
   <div class="dots" style="--dots-x: 50%; --dots-y: 40%" aria-hidden="true"></div>
   <div class="container">
     <div class="section-head" data-reveal>
-      <span class="eyebrow">A conta da recorrência</span>
-      <h2 id="cenarios-title">Pequenas diferenças percentuais, repetidas todo mês.</h2>
-      <p>
-        Três contas abertas mostram como uma diferença de base ou de alíquota se acumula em
-        doze competências. São aritmética, não estimativa de resultado.
-      </p>
+      <span class="eyebrow">{t.eyebrow}</span>
+      <h2 id="cenarios-title">{t.titulo}</h2>
+      <p>{t.texto}</p>
     </div>
 
     <div class="cenarios__grid">
@@ -32,6 +30,7 @@ const compact = (v: number) =>
     </div>
 
     <!-- Simulador: alíquota efetiva RAT × FAP. Sem JS, a seção acima já informa. -->
+    {t.mostrarSimulador && (
     <div class="sim" data-reveal data-sim hidden>
       <div class="sim__head">
         <span class="eyebrow">Simulador</span>
@@ -67,11 +66,9 @@ const compact = (v: number) =>
         O FAP é calculado por estabelecimento e divulgado anualmente pelo governo federal.
       </p>
     </div>
+    )}
 
-    <p class="cenarios__disclaimer">
-      * Exemplos hipotéticos. Não representam promessa de economia, crédito ou resultado; a viabilidade
-      de qualquer medida depende de análise técnica e documental individualizada.
-    </p>
+    <p class="cenarios__disclaimer">{t.aviso}</p>
   </div>
 </section>
 

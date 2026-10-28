@@ -9,7 +9,8 @@ import BlogTeaser from '../components/BlogTeaser.astro';
 import Faq from '../components/Faq.astro';
 import CtaFinal from '../components/CtaFinal.astro';
 import { SITE } from '../data/site';
-import { FAQ } from '../data/content';
+import { FAQ, HOME } from '../data/content';
+import { inline } from '../lib/md';
 import { faqPage } from '../lib/schema';
 ---
 <Base title={SITE.name} schema={[faqPage(FAQ, '/')]}>
@@ -18,11 +19,7 @@ import { faqPage } from '../lib/schema';
   <!-- Bloco de resposta direta: definição extraível por buscadores e motores de IA -->
   <section class="definicao" aria-label="O que é a AJUSTAPREV">
     <div class="container definicao__inner">
-      <p>
-        <strong>A AJUSTAPREV atua em direito empresarial previdenciário:</strong> revisa a folha e os recolhimentos
-        das empresas, valida o enquadramento do SAT/RAT, administra o risco de afastamentos e do FAP e conduz a
-        recuperação de contribuições pagas a maior — sempre com o impacto financeiro medido antes da decisão.
-      </p>
+      <p set:html={inline(HOME.definicao)} />
     </div>
   </section>
 
@@ -31,7 +28,7 @@ import { faqPage } from '../lib/schema';
   <Cenarios />
   <Metodo />
   <BlogTeaser />
-  <Faq items={FAQ} />
+  <Faq items={FAQ} title={HOME.faq.titulo} eyebrow={HOME.faq.eyebrow} text={HOME.faq.texto} />
   <CtaFinal />
 </Base>
 

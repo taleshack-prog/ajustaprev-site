@@ -10,6 +10,8 @@
  */
 import { Picture } from 'astro:assets';
 import torres from '../assets/hero-torres.png';
+import { HOME } from '../data/content';
+const h = HOME.hero;
 ---
 <section class="hero" id="hero" aria-labelledby="hero-title">
   <div class="hero__media" aria-hidden="true">
@@ -33,26 +35,19 @@ import torres from '../assets/hero-torres.png';
 
   <div class="container hero__inner">
     <div class="hero__content">
-      <p class="eyebrow">Defesa Empresarial Previdenciária</p>
-      <h1 id="hero-title">Previdência empresarial com <span class="hero__accent">estratégia.</span></h1>
-      <p class="lead hero__lead">
-        Auditoria, consultoria e defesa para empresas que buscam segurança, conformidade
-        e recuperação de contribuições.
-      </p>
+      <p class="eyebrow">{h.eyebrow}</p>
+      <h1 id="hero-title">{h.titulo} {h.destaque && <span class="hero__accent">{h.destaque}</span>}</h1>
+      <p class="lead hero__lead">{h.lead}</p>
       <div class="hero__actions">
-        <a class="btn" href="#solucoes">Conheça as soluções <span class="arrow" aria-hidden="true">→</span></a>
-        <a class="btn btn--ghost" href="/contato/">Solicitar diagnóstico</a>
+        <a class="btn" href="#solucoes">{h.ctaPrimario} <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="/contato/">{h.ctaSecundario}</a>
       </div>
     </div>
   </div>
 
   <div class="container hero__services-wrap">
     <ul class="hero__services" role="list" aria-label="Áreas de atuação">
-      <li>Auditoria</li>
-      <li>Consultoria</li>
-      <li>Recuperação de contribuições</li>
-      <li>Defesa em autuações</li>
-      <li>Conformidade</li>
+      {h.servicos.map((s) => <li>{s}</li>)}
     </ul>
   </div>
 </section>

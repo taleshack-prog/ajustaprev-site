@@ -123,3 +123,235 @@ collections:
         name: body
         widget: markdown
         hint: 'Comece com um parágrafo "Resposta direta:" que define o tema em poucas linhas.'
+
+  # ---------------------------------------------------------------------------
+  # Textos do site. Cada entrada edita um arquivo JSON em src/data/.
+  # Títulos de seção e textos curtos aceitam **negrito**, *itálico* e [link](url).
+  # ---------------------------------------------------------------------------
+  - name: site
+    label: Site
+    description: Textos da página inicial, frentes de atuação, página Sobre e dados de contato.
+    editor: { preview: false }
+    files:
+      - name: home
+        label: Página inicial
+        file: src/data/home.json
+        format: json
+        fields:
+          - label: Abertura (hero)
+            name: hero
+            widget: object
+            collapsed: false
+            fields:
+              - { label: Sobretítulo, name: eyebrow, widget: string }
+              - { label: Título, name: titulo, widget: string, hint: 'Parte em branco do título.' }
+              - { label: Destaque em azul, name: destaque, widget: string, required: false, hint: 'Continua o título, em azul. Ex.: estratégia.' }
+              - { label: Texto de apoio, name: lead, widget: text }
+              - { label: Botão principal, name: ctaPrimario, widget: string }
+              - { label: Botão secundário, name: ctaSecundario, widget: string }
+              - { label: Faixa de serviços, name: servicos, widget: list, field: { label: Serviço, name: servico, widget: string } }
+          - label: Definição (logo abaixo da abertura)
+            name: definicao
+            widget: text
+            hint: 'Um parágrafo que define o serviço. É o trecho que buscadores e IAs extraem. Aceita **negrito**.'
+          - label: Onde o custo se esconde
+            name: dores
+            widget: object
+            fields:
+              - { label: Sobretítulo, name: eyebrow, widget: string }
+              - { label: Título, name: titulo, widget: string }
+              - { label: Texto, name: texto, widget: text }
+              - label: Pontos
+                name: itens
+                widget: list
+                summary: '{{fields.titulo}}'
+                fields:
+                  - { label: Título, name: titulo, widget: string }
+                  - { label: Texto, name: texto, widget: text }
+                  - { label: Ícone, name: icone, widget: select, options: [{ label: Documento, value: folha }, { label: Gráfico, value: carga }, { label: Base de dados, value: rat }, { label: Escudo, value: fap }] }
+          - label: Frentes (introdução da seção)
+            name: frentes
+            widget: object
+            hint: Os cards das frentes são editados em Site → Frentes de atuação.
+            fields:
+              - { label: Sobretítulo, name: eyebrow, widget: string }
+              - { label: Título, name: titulo, widget: string }
+              - { label: Texto, name: texto, widget: text }
+          - label: Cenários ilustrativos
+            name: cenarios
+            widget: object
+            fields:
+              - { label: Sobretítulo, name: eyebrow, widget: string }
+              - { label: Título, name: titulo, widget: string }
+              - { label: Texto, name: texto, widget: text }
+              - label: Cenários
+                name: itens
+                widget: list
+                summary: '{{fields.rotulo}} — {{fields.baseTxt}}'
+                hint: O valor anual é calculado automaticamente (base × efeito × 12).
+                fields:
+                  - { label: Rótulo, name: rotulo, widget: string }
+                  - { label: Folha mensal (R$), name: base, widget: number, value_type: int, min: 0 }
+                  - { label: Folha mensal (texto), name: baseTxt, widget: string, hint: 'Ex.: Folha mensal de R$ 3,0 mi' }
+                  - { label: Efeito (fração), name: efeito, widget: number, value_type: float, min: 0, max: 1, step: 0.0005, hint: '1% = 0.01; 0,5 p.p. = 0.005' }
+                  - { label: Efeito (texto), name: efeitoTxt, widget: string }
+                  - { label: Nota, name: nota, widget: string }
+              - { label: Aviso legal, name: aviso, widget: text }
+              - { label: Mostrar simulador RAT × FAP, name: mostrarSimulador, widget: boolean, default: true }
+          - label: Método
+            name: metodo
+            widget: object
+            fields:
+              - { label: Sobretítulo, name: eyebrow, widget: string }
+              - { label: Título, name: titulo, widget: string }
+              - { label: Texto, name: texto, widget: text }
+              - label: Etapas
+                name: etapas
+                widget: list
+                summary: '{{fields.titulo}}'
+                fields:
+                  - { label: Título, name: titulo, widget: string }
+                  - { label: Texto, name: texto, widget: text }
+          - label: Para quem
+            name: publico
+            widget: object
+            fields:
+              - { label: Sobretítulo, name: eyebrow, widget: string }
+              - { label: Título, name: titulo, widget: string }
+              - label: Perfis
+                name: perfis
+                widget: list
+                summary: '{{fields.perfil}}'
+                fields:
+                  - { label: Perfil, name: perfil, widget: string }
+                  - { label: Dor central, name: dor, widget: string }
+                  - { label: O que recebe, name: ve, widget: string }
+          - label: Chamada do blog
+            name: blog
+            widget: object
+            fields:
+              - { label: Sobretítulo, name: eyebrow, widget: string }
+              - { label: Título, name: titulo, widget: string }
+              - { label: Texto, name: texto, widget: text }
+          - label: Perguntas frequentes
+            name: faq
+            widget: object
+            fields:
+              - { label: Sobretítulo, name: eyebrow, widget: string }
+              - { label: Título, name: titulo, widget: string }
+              - { label: Texto, name: texto, widget: string }
+              - label: Perguntas
+                name: itens
+                widget: list
+                summary: '{{fields.q}}'
+                fields:
+                  - { label: Pergunta, name: q, widget: string }
+                  - { label: Resposta, name: a, widget: text }
+          - label: Chamada final (aparece em todas as páginas)
+            name: cta
+            widget: object
+            fields:
+              - { label: Sobretítulo, name: eyebrow, widget: string }
+              - { label: Título, name: titulo, widget: string }
+              - { label: Texto, name: texto, widget: text }
+              - { label: Texto do botão, name: botao, widget: string }
+              - { label: Garantias, name: garantias, widget: list, max: 3, field: { label: Garantia, name: garantia, widget: string } }
+
+      - name: frentes
+        label: Frentes de atuação
+        file: src/data/frentes.json
+        format: json
+        fields:
+          - label: Frentes
+            name: itens
+            widget: list
+            summary: '{{fields.titulo}}'
+            hint: A ordem da lista define a numeração (01, 02…). Cada frente tem página própria em /solucoes/<endereço>/.
+            fields:
+              - { label: Título, name: titulo, widget: string }
+              - { label: Nome curto (menu e rodapé), name: curto, widget: string }
+              - label: Endereço da página
+                name: slug
+                widget: string
+                pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', 'Use só letras minúsculas, números e hífens.']
+                hint: 'Ex.: sat-rat → /solucoes/sat-rat/. Mudar quebra links já compartilhados.'
+              - { label: Resumo, name: resumo, widget: text }
+              - { label: Objetivo, name: objetivo, widget: text }
+              - label: Etapas
+                name: etapas
+                widget: list
+                summary: '{{fields.titulo}}'
+                fields:
+                  - { label: Título, name: titulo, widget: string }
+                  - { label: Texto, name: texto, widget: text }
+              - { label: Resultado esperado, name: entrega, widget: text }
+              - { label: Para quem, name: paraQuem, widget: list, field: { label: Perfil, name: perfil, widget: string } }
+              - label: Perguntas da página
+                name: perguntas
+                widget: list
+                summary: '{{fields.q}}'
+                fields:
+                  - { label: Pergunta, name: q, widget: string }
+                  - { label: Resposta, name: a, widget: text }
+              - { label: Palavras-chave (SEO), name: keywords, widget: list, required: false, field: { label: Palavra-chave, name: keyword, widget: string } }
+
+      - name: sobre
+        label: Página Sobre
+        file: src/data/sobre.json
+        format: json
+        fields:
+          - { label: Sobretítulo, name: eyebrow, widget: string }
+          - { label: Título, name: titulo, widget: string }
+          - { label: Texto de apoio, name: lead, widget: text }
+          - { label: Texto principal, name: texto, widget: text, hint: 'Separe parágrafos com uma linha em branco. Aceita **negrito**.' }
+          - { label: Valores da marca, name: valores, widget: list, field: { label: Valor, name: valor, widget: string } }
+          - { label: Título dos princípios, name: principiosTitulo, widget: string }
+          - label: Princípios
+            name: principios
+            widget: list
+            summary: '{{fields.titulo}}'
+            fields:
+              - { label: Título, name: titulo, widget: string }
+              - { label: Texto, name: texto, widget: text }
+
+      - name: configuracoes
+        label: Configurações e contato
+        file: src/data/site.json
+        format: json
+        fields:
+          - { label: Nome, name: name, widget: string }
+          - { label: Assinatura, name: tagline, widget: string }
+          - { label: Frase da marca, name: claim, widget: string }
+          - { label: Endereço do site, name: url, widget: string, pattern: ['^https://', 'Use o endereço completo, começando com https://'], hint: 'Domínio definitivo. Usado no Google, no sitemap e nos links de compartilhamento.' }
+          - { label: Descrição para buscadores, name: description, widget: text, pattern: ['^[\s\S]{50,160}$', 'Entre 50 e 160 caracteres.'] }
+          - label: Contato
+            name: contact
+            widget: object
+            fields:
+              - { label: E-mail, name: email, widget: string, required: false }
+              - { label: Telefone (como aparece), name: phone, widget: string, required: false, hint: 'Ex.: (61) 3333-4444. Em branco = não aparece.' }
+              - { label: Telefone (para discagem), name: phoneHref, widget: string, required: false, hint: 'Formato internacional, só números: +556133334444' }
+              - { label: Cidade, name: city, widget: string, required: false }
+          - label: Identificação profissional
+            name: legal
+            widget: object
+            hint: Exigida pelo Provimento CFOAB 205/2021 quando a comunicação for de advocacia.
+            fields:
+              - { label: Responsável técnico, name: responsibleName, widget: string, required: false }
+              - { label: Inscrição na OAB, name: oab, widget: string, required: false, hint: 'Ex.: OAB/DF 00.000' }
+              - { label: Sociedade de advogados, name: society, widget: string, required: false }
+              - { label: CNPJ, name: cnpj, widget: string, required: false }
+          - label: Redes sociais
+            name: social
+            widget: object
+            fields:
+              - { label: LinkedIn, name: linkedin, widget: string, required: false }
+              - { label: Instagram, name: instagram, widget: string, required: false }
+          - { label: Mantido por, name: maintainer, widget: string }
+          - label: Pendências de publicação
+            name: pendencias
+            widget: object
+            hint: Marque quando confirmar. Enquanto houver pendência, o deploy de produção com PUBLISH=1 é bloqueado.
+            fields:
+              - { label: E-mail confirmado, name: emailConfirmado, widget: boolean, default: false }
+              - { label: Domínio confirmado, name: dominioConfirmado, widget: boolean, default: false }

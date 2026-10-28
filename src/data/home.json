@@ -1,0 +1,183 @@
+{
+  "hero": {
+    "eyebrow": "Defesa Empresarial Previdenciária",
+    "titulo": "Previdência empresarial com",
+    "destaque": "estratégia.",
+    "lead": "Auditoria, consultoria e defesa para empresas que buscam segurança, conformidade e recuperação de contribuições.",
+    "ctaPrimario": "Conheça as soluções",
+    "ctaSecundario": "Solicitar diagnóstico",
+    "servicos": [
+      "Auditoria",
+      "Consultoria",
+      "Recuperação de contribuições",
+      "Defesa em autuações",
+      "Conformidade"
+    ]
+  },
+  "definicao": "**A AJUSTAPREV atua em direito empresarial previdenciário:** revisa a folha e os recolhimentos das empresas, valida o enquadramento do SAT/RAT, administra o risco de afastamentos e do FAP e conduz a recuperação de contribuições pagas a maior — sempre com o impacto financeiro medido antes da decisão.",
+  "dores": {
+    "eyebrow": "Onde o custo se esconde",
+    "titulo": "A empresa pode perder margem sem perceber.",
+    "texto": "Pelo que paga e pelo risco que não administra. Quatro pontos concentram a maior parte das distorções na carga previdenciária sobre a folha.",
+    "itens": [
+      {
+        "titulo": "Folha de salários",
+        "texto": "Rubricas com natureza ou incidência parametrizada de forma incorreta fazem a base de cálculo crescer sem que ninguém perceba — todos os meses.",
+        "icone": "folha"
+      },
+      {
+        "titulo": "Carga previdenciária",
+        "texto": "Contribuições patronais que nunca foram revisadas tecnicamente podem estar acima do devido. A conferência começa pelo que a empresa já recolhe.",
+        "icone": "carga"
+      },
+      {
+        "titulo": "SAT / RAT",
+        "texto": "A alíquota de 1%, 2% ou 3% depende da atividade preponderante de cada estabelecimento. Um enquadramento incoerente se repete em toda competência.",
+        "icone": "rat"
+      },
+      {
+        "titulo": "Afastamentos e FAP",
+        "texto": "Benefícios acidentários e CATs alimentam o FAP, que multiplica o RAT por um fator entre 0,5 e 2,0. Erros na base têm prazo curto para contestação.",
+        "icone": "fap"
+      }
+    ]
+  },
+  "frentes": {
+    "eyebrow": "Soluções",
+    "titulo": "Atuação em quatro frentes.",
+    "texto": "Folha, contencioso, enquadramento e risco tratados de forma integrada — porque uma decisão sobre afastamento repercute no FAP, e um enquadramento repercute em toda a folha."
+  },
+  "cenarios": {
+    "eyebrow": "A conta da recorrência",
+    "titulo": "Pequenas diferenças percentuais, repetidas todo mês.",
+    "texto": "Três contas abertas mostram como uma diferença de base ou de alíquota se acumula em doze competências. São aritmética, não estimativa de resultado.",
+    "itens": [
+      {
+        "rotulo": "Folha",
+        "base": 2000000,
+        "baseTxt": "Folha mensal de R$ 2,0 mi",
+        "efeito": 0.015,
+        "efeitoTxt": "diferença de 1,5% da base",
+        "nota": "Rubricas com incidência a maior."
+      },
+      {
+        "rotulo": "SAT / RAT",
+        "base": 3000000,
+        "baseTxt": "Folha mensal de R$ 3,0 mi",
+        "efeito": 0.01,
+        "efeitoTxt": "alíquota de 3% para 2% (1 p.p.)",
+        "nota": "Enquadramento por estabelecimento."
+      },
+      {
+        "rotulo": "FAP",
+        "base": 3000000,
+        "baseTxt": "Folha mensal de R$ 3,0 mi",
+        "efeito": 0.005,
+        "efeitoTxt": "alíquota efetiva 0,5 p.p. menor",
+        "nota": "Ex.: RAT 2% com FAP de 1,25 para 1,00."
+      }
+    ],
+    "aviso": "* Exemplos hipotéticos. Não representam promessa de economia, crédito ou resultado; a viabilidade de qualquer medida depende de análise técnica e documental individualizada.",
+    "mostrarSimulador": true
+  },
+  "metodo": {
+    "eyebrow": "Como o projeto funciona",
+    "titulo": "A empresa decide com números antes de avançar.",
+    "texto": "Cinco etapas, com uma regra: nada é implementado sem business case aprovado pela diretoria.",
+    "etapas": [
+      {
+        "titulo": "Imersão e dados",
+        "texto": "Entendimento da operação, da folha, do histórico e dos pontos de atenção."
+      },
+      {
+        "titulo": "Diagnóstico técnico",
+        "texto": "Análise jurídica e financeira das oportunidades e dos riscos encontrados."
+      },
+      {
+        "titulo": "Business case",
+        "texto": "Quanto custa hoje, quanto pode mudar, com qual risco e em que ordem."
+      },
+      {
+        "titulo": "Implementação",
+        "texto": "Execução apenas das medidas aprovadas pela empresa, com governança e documentação."
+      },
+      {
+        "titulo": "Acompanhamento",
+        "texto": "Monitoramento dos efeitos, dos riscos e de novas ocorrências."
+      }
+    ]
+  },
+  "publico": {
+    "eyebrow": "Para quem",
+    "titulo": "Quatro interlocutores, uma mesma base de dados.",
+    "perfis": [
+      {
+        "perfil": "CFO / Controller",
+        "dor": "Custo previdenciário sem controle",
+        "ve": "Quantificação e método"
+      },
+      {
+        "perfil": "Diretoria jurídica",
+        "dor": "Risco de autuação e de ação regressiva",
+        "ve": "Conformidade e prevenção"
+      },
+      {
+        "perfil": "RH / DHO",
+        "dor": "Afastamentos e FAP desorganizados",
+        "ve": "Processo e governança"
+      },
+      {
+        "perfil": "Sócio em M&A",
+        "dor": "Passivo oculto em due diligence",
+        "ve": "Escopo de auditoria"
+      }
+    ]
+  },
+  "blog": {
+    "eyebrow": "Conteúdo técnico",
+    "titulo": "Para quem decide sobre a folha.",
+    "texto": "Análises objetivas sobre custeio, enquadramento e risco previdenciário — com a norma citada."
+  },
+  "faq": {
+    "eyebrow": "Antes do contato",
+    "titulo": "Perguntas frequentes",
+    "texto": "Respostas diretas às dúvidas que costumam vir antes do diagnóstico.",
+    "itens": [
+      {
+        "q": "O trabalho substitui a contabilidade ou o departamento pessoal?",
+        "a": "Não. A atuação é complementar: a contabilidade e o DP continuam responsáveis pela rotina, e a AJUSTAPREV revisa critérios, quantifica efeitos e orienta correções."
+      },
+      {
+        "q": "Há garantia de economia ou de recuperação de valores?",
+        "a": "Não. O diagnóstico existe justamente para que a empresa decida com números e riscos medidos. Nenhum resultado é prometido antes da análise documental."
+      },
+      {
+        "q": "O diagnóstico é confidencial?",
+        "a": "Sim. Os dados são tratados sob acordo de confidencialidade e usados exclusivamente para a análise contratada."
+      },
+      {
+        "q": "Quais documentos são necessários para começar?",
+        "a": "Em regra: tabela de rubricas e eventos de remuneração do eSocial, apurações da DCTFWeb, extrato do FAP e relação de CATs e afastamentos. A lista exata depende do escopo."
+      },
+      {
+        "q": "Até quando é possível rever valores pagos a maior?",
+        "a": "Em regra, o direito à restituição ou compensação alcança os cinco anos anteriores ao pedido. Cada competência que passa sem revisão pode sair dessa janela."
+      },
+      {
+        "q": "Qual é o prazo para contestar o FAP de 2027?",
+        "a": "De 1º a 30 de novembro de 2026, por formulário eletrônico nos sites da Previdência e da Receita Federal. A contestação não suspende a aplicação do índice."
+      }
+    ]
+  },
+  "cta": {
+    "eyebrow": "Próximo passo",
+    "titulo": "Quanto custa não revisar?",
+    "texto": "Em empresas com folha relevante, pequenas distorções percentuais se transformam em valores altos quando repetidas mês após mês. O ponto de partida é um diagnóstico executivo e confidencial.",
+    "botao": "Solicitar diagnóstico",
+    "garantias": [
+      "Sob acordo de confidencialidade",
+      "Sem interferir na rotina do DP",
+      "Números antes de qualquer decisão"
+    ]
+  }
+}

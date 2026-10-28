@@ -1,17 +1,15 @@
 ---
-import { FRENTES } from '../data/content';
+import { FRENTES, HOME } from '../data/content';
+const t = HOME.frentes;
 ---
 <section class="section section--alt frentes" id="solucoes" aria-labelledby="frentes-title">
   <div class="gridlines" aria-hidden="true"></div>
   <div class="container">
     <div class="section-head section-head--split" data-reveal>
       <div>
-        <span class="eyebrow">Soluções</span>
-        <h2 id="frentes-title">Atuação em quatro frentes.</h2>
-        <p>
-          Folha, contencioso, enquadramento e risco tratados de forma integrada — porque uma decisão
-          sobre afastamento repercute no FAP, e um enquadramento repercute em toda a folha.
-        </p>
+        <span class="eyebrow">{t.eyebrow}</span>
+        <h2 id="frentes-title">{t.titulo}</h2>
+        <p>{t.texto}</p>
       </div>
     </div>
 

@@ -1,28 +1,26 @@
 ---
 import { SITE } from '../data/site';
 import Icon from './Icon.astro';
+import { HOME } from '../data/content';
+const c = HOME.cta;
 interface Props { title?: string; text?: string }
-const {
-  title = 'Quanto custa não revisar?',
-  text = 'Em empresas com folha relevante, pequenas distorções percentuais se transformam em valores altos quando repetidas mês após mês. O ponto de partida é um diagnóstico executivo e confidencial.',
-} = Astro.props;
+const { title = c.titulo, text = c.texto } = Astro.props;
+const icones = ['lock', 'gear', 'carga'];
 ---
 <section class="cta-final" aria-labelledby="cta-title">
   <div class="dots" style="--dots-x: 78%; --dots-y: 50%" aria-hidden="true"></div>
   <div class="container cta-final__inner">
     <div data-reveal>
-      <span class="eyebrow">Próximo passo</span>
+      <span class="eyebrow">{c.eyebrow}</span>
       <h2 id="cta-title">{title}</h2>
       <span class="rule" aria-hidden="true"></span>
       <p class="lead">{text}</p>
     </div>
     <div class="cta-final__box" data-reveal>
       <ul role="list" class="cta-final__list">
-        <li><Icon name="lock" size={20} /> Sob acordo de confidencialidade</li>
-        <li><Icon name="gear" size={20} /> Sem interferir na rotina do DP</li>
-        <li><Icon name="carga" size={20} /> Números antes de qualquer decisão</li>
+        {c.garantias.map((g, i) => <li><Icon name={icones[i % icones.length]} size={20} /> {g}</li>)}
       </ul>
-      <a href="/contato/" class="btn">Solicitar diagnóstico <span class="arrow" aria-hidden="true">→</span></a>
+      <a href="/contato/" class="btn">{c.botao} <span class="arrow" aria-hidden="true">→</span></a>
       {SITE.contact.email && (
         <a class="link cta-final__mail" href={`mailto:${SITE.contact.email}`}>{SITE.contact.email}</a>
       )}

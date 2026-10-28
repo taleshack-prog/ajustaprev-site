@@ -1,0 +1,28 @@
+{
+  "name": "AJUSTAPREV",
+  "tagline": "Defesa Empresarial Previdenciária",
+  "claim": "O ajuste certo. A contribuição justa.",
+  "url": "https://www.ajustaprev.com.br",
+  "description": "Auditoria, consultoria e defesa previdenciária para empresas: folha, SAT/RAT, FAP, afastamentos e recuperação de contribuições.",
+  "contact": {
+    "email": "luiz@ajustaprev.com.br",
+    "phone": "",
+    "phoneHref": "",
+    "city": ""
+  },
+  "maintainer": "Hack Tech Farm",
+  "legal": {
+    "responsibleName": "",
+    "oab": "",
+    "society": "",
+    "cnpj": ""
+  },
+  "social": {
+    "linkedin": "",
+    "instagram": ""
+  },
+  "pendencias": {
+    "emailConfirmado": false,
+    "dominioConfirmado": false
+  }
+}

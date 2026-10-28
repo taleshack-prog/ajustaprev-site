@@ -1,0 +1,174 @@
+{
+  "itens": [
+    {
+      "slug": "consultoria-folha",
+      "titulo": "Consultoria administrativa sobre a folha",
+      "curto": "Consultoria da folha",
+      "resumo": "Revisão técnica da folha e dos recolhimentos para identificar distorções de incidência, parametrização e valores a recuperar.",
+      "objetivo": "Descobrir se a empresa recolhe corretamente — e se existe valor a recuperar ou custo recorrente a interromper.",
+      "etapas": [
+        {
+          "titulo": "Diagnóstico",
+          "texto": "Leitura técnica da tabela de rubricas do eSocial, das remunerações e das declarações, com foco em incidências e parametrizações."
+        },
+        {
+          "titulo": "Quantificação",
+          "texto": "Mensuração financeira de cada ponto encontrado, separando o impacto histórico (até cinco anos) da economia prospectiva."
+        },
+        {
+          "titulo": "Plano de ação",
+          "texto": "Entrega executiva com prioridades, caminhos administrativos possíveis e nível de risco de cada medida."
+        }
+      ],
+      "entrega": "Visibilidade: a empresa passa a saber onde paga, por que paga e onde pode corrigir.",
+      "paraQuem": [
+        "CFO e controladoria",
+        "Contabilidade e departamento pessoal",
+        "Diretoria jurídica"
+      ],
+      "perguntas": [
+        {
+          "q": "A revisão interfere na rotina do departamento pessoal?",
+          "a": "Não. O trabalho é feito sobre arquivos e relatórios já existentes; ajustes de parametrização só são propostos depois do diagnóstico e aprovados pela empresa."
+        },
+        {
+          "q": "Quais dados são necessários?",
+          "a": "Tabela de rubricas (S-1010), eventos de remuneração (S-1200), apurações da DCTFWeb e, quando houver, relatórios da folha do período analisado."
+        }
+      ],
+      "keywords": [
+        "revisão de folha de pagamento",
+        "rubricas eSocial",
+        "incidência contribuição previdenciária"
+      ]
+    },
+    {
+      "slug": "discussao-judicial",
+      "titulo": "Discussão judicial de contribuições",
+      "curto": "Discussão judicial",
+      "resumo": "Mapeamento de discussões jurídicas compatíveis com a estrutura remuneratória da empresa, com racional econômico e de risco antes de qualquer ajuizamento.",
+      "objetivo": "Escolher discussões com fundamento, aderência à realidade da empresa e retorno mensurável — nunca ajuizar por ajuizar.",
+      "etapas": [
+        {
+          "titulo": "Mapeamento",
+          "texto": "Identificação das parcelas da remuneração que admitem discussão e da jurisprudência aplicável a cada uma."
+        },
+        {
+          "titulo": "Estratégia",
+          "texto": "Definição do caminho processual, da documentação necessária e do momento adequado, com análise de risco e de eventual sucumbência."
+        },
+        {
+          "titulo": "Acompanhamento",
+          "texto": "Condução do processo e orientação sobre a forma de cumprimento de eventual decisão favorável, inclusive compensação."
+        }
+      ],
+      "entrega": "Decisão informada: cada discussão chega à diretoria com impacto, risco e prazo estimados.",
+      "paraQuem": [
+        "Diretoria jurídica",
+        "CFO",
+        "Conselho de administração"
+      ],
+      "perguntas": [
+        {
+          "q": "Quais teses são analisadas?",
+          "a": "Depende da estrutura remuneratória da empresa. As discussões cabíveis são apresentadas no diagnóstico, com o estado atual da jurisprudência de cada uma."
+        },
+        {
+          "q": "Existe garantia de êxito?",
+          "a": "Não. Nenhuma discussão judicial tem resultado garantido; por isso o risco é medido e apresentado antes da decisão."
+        }
+      ],
+      "keywords": [
+        "exclusão base de cálculo contribuição previdenciária",
+        "ação judicial contribuição patronal"
+      ]
+    },
+    {
+      "slug": "sat-rat",
+      "titulo": "Enquadramento e reenquadramento do SAT / RAT",
+      "curto": "SAT / RAT",
+      "resumo": "Validação da atividade preponderante de cada estabelecimento e do grau de risco aplicado, com simulação do efeito de eventual reenquadramento.",
+      "objetivo": "Fazer a alíquota refletir a atividade preponderante real de cada estabelecimento — nem mais, nem menos.",
+      "etapas": [
+        {
+          "titulo": "Validação cadastral",
+          "texto": "Conferência do CNAE preponderante de cada CNPJ, a partir do número de empregados e avulsos por atividade."
+        },
+        {
+          "titulo": "Impacto financeiro",
+          "texto": "Cálculo do custo atual e simulação do efeito de um reenquadramento tecnicamente sustentável."
+        },
+        {
+          "titulo": "Implementação",
+          "texto": "Orientação para o ajuste no eSocial e documentação do racional adotado, reduzindo exposição a questionamentos."
+        }
+      ],
+      "entrega": "Enquadramento auditável, com memória de cálculo por estabelecimento.",
+      "paraQuem": [
+        "Empresas com mais de um estabelecimento",
+        "Grupos com atividades distintas por unidade"
+      ],
+      "perguntas": [
+        {
+          "q": "O enquadramento é por empresa ou por estabelecimento?",
+          "a": "Por estabelecimento. A Receita Federal reafirmou em 2026 (Solução de Consulta Cosit nº 124/2026) que cada unidade com CNPJ próprio apura a sua atividade preponderante."
+        },
+        {
+          "q": "Mudar o enquadramento altera o CNAE principal?",
+          "a": "Não. A atividade preponderante serve apenas para definir a alíquota do RAT; o CNAE principal cadastrado permanece."
+        }
+      ],
+      "keywords": [
+        "enquadramento RAT atividade preponderante",
+        "GILRAT estabelecimento",
+        "reenquadramento SAT"
+      ]
+    },
+    {
+      "slug": "gestao-de-risco",
+      "titulo": "Gestão de risco previdenciário e afastados",
+      "curto": "Risco e afastados",
+      "resumo": "Afastamentos, benefícios acidentários, FAP e prevenção de ações regressivas tratados como uma única cadeia de custo.",
+      "objetivo": "Reduzir o efeito sistêmico de cada afastamento sobre o FAP, sobre o passivo e sobre a operação.",
+      "etapas": [
+        {
+          "titulo": "Benefícios acidentários",
+          "texto": "Revisão dos benefícios concedidos com nexo acidentário e análise das medidas de contestação cabíveis."
+        },
+        {
+          "titulo": "FAP",
+          "texto": "Conferência dos elementos do cálculo — CATs, benefícios, massa salarial, vínculos e rotatividade — e contestação no prazo."
+        },
+        {
+          "titulo": "Gestão de afastados",
+          "texto": "Acompanhamento técnico-jurídico dos casos, com fluxo documental entre RH, SESMT e jurídico."
+        },
+        {
+          "titulo": "Ações regressivas",
+          "texto": "Atuação preventiva sobre documentação, processos e evidências que reduzem exposição futura."
+        }
+      ],
+      "entrega": "Uma linha de defesa organizada antes que o afastamento vire custo recorrente.",
+      "paraQuem": [
+        "RH / DHO",
+        "SESMT",
+        "Diretoria jurídica"
+      ],
+      "perguntas": [
+        {
+          "q": "Qual o prazo para contestar o FAP 2027?",
+          "a": "De 1º a 30 de novembro de 2026, por formulário eletrônico, conforme a Portaria Interministerial MPS/MF nº 16/2026. A contestação não tem efeito suspensivo."
+        },
+        {
+          "q": "O que pode ser contestado?",
+          "a": "Divergências nos elementos do cálculo: CATs, benefícios, massa salarial, número médio de vínculos e taxa média de rotatividade."
+        }
+      ],
+      "keywords": [
+        "contestação FAP 2027",
+        "nexo técnico epidemiológico",
+        "ação regressiva INSS"
+      ]
+    }
+  ]
+}

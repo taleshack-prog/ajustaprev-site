@@ -1,6 +1,8 @@
 ---
 import PostCard from './PostCard.astro';
 import { getPosts } from '../lib/blog';
+import { HOME } from '../data/content';
+const t = HOME.blog;
 const posts = (await getPosts()).slice(0, 3);
 ---
 {posts.length > 0 && (
@@ -8,9 +10,9 @@ const posts = (await getPosts()).slice(0, 3);
     <div class="container">
       <div class="section-head section-head--split" data-reveal>
         <div>
-          <span class="eyebrow">Conteúdo técnico</span>
-          <h2 id="blog-title">Para quem decide sobre a folha.</h2>
-          <p>Análises objetivas sobre custeio, enquadramento e risco previdenciário — com a norma citada.</p>
+          <span class="eyebrow">{t.eyebrow}</span>
+          <h2 id="blog-title">{t.titulo}</h2>
+          <p>{t.texto}</p>
         </div>
         <a href="/blog/" class="btn btn--ghost btn--sm">Ver todos os artigos <span class="arrow" aria-hidden="true">→</span></a>
       </div>

@@ -1,17 +1,15 @@
 ---
 import Icon from './Icon.astro';
-import { DORES } from '../data/content';
+import { DORES, HOME } from '../data/content';
+const t = HOME.dores;
 ---
 <section class="section dores" aria-labelledby="dores-title">
   <div class="dots" style="--dots-x: 85%; --dots-y: 10%" aria-hidden="true"></div>
   <div class="container">
     <div class="section-head" data-reveal>
-      <span class="eyebrow">Onde o custo se esconde</span>
-      <h2 id="dores-title">A empresa pode perder margem sem perceber.</h2>
-      <p>
-        Pelo que paga e pelo risco que não administra. Quatro pontos concentram a maior parte
-        das distorções na carga previdenciária sobre a folha.
-      </p>
+      <span class="eyebrow">{t.eyebrow}</span>
+      <h2 id="dores-title">{t.titulo}</h2>
+      <p>{t.texto}</p>
     </div>
 
     <ol class="dores__list" role="list">

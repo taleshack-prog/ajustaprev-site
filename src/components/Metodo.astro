@@ -1,14 +1,14 @@
 ---
-import { METODO, PUBLICO } from '../data/content';
+import { METODO, PUBLICO, HOME } from '../data/content';
+const t = HOME.metodo;
+const p = HOME.publico;
 ---
 <section class="section metodo" id="metodo" aria-labelledby="metodo-title">
   <div class="container">
     <div class="section-head" data-reveal>
-      <span class="eyebrow">Como o projeto funciona</span>
-      <h2 id="metodo-title">A empresa decide com números antes de avançar.</h2>
-      <p>
-        Cinco etapas, com uma regra: nada é implementado sem business case aprovado pela diretoria.
-      </p>
+      <span class="eyebrow">{t.eyebrow}</span>
+      <h2 id="metodo-title">{t.titulo}</h2>
+      <p>{t.texto}</p>
     </div>
 
     <ol class="steps" role="list">
@@ -24,8 +24,8 @@ import { METODO, PUBLICO } from '../data/content';
 
     <div class="publico" data-reveal>
       <div class="publico__head">
-        <span class="eyebrow">Para quem</span>
-        <h3>Quatro interlocutores, uma mesma base de dados.</h3>
+        <span class="eyebrow">{p.eyebrow}</span>
+        <h3>{p.titulo}</h3>
       </div>
       <div class="publico__table" role="table" aria-label="Perfis atendidos">
         <div class="publico__row publico__row--head" role="row">

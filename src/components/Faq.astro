@@ -4,15 +4,22 @@ interface Props {
   title?: string;
   eyebrow?: string;
   id?: string;
+  text?: string;
 }
-const { items, title = 'Perguntas frequentes', eyebrow = 'Antes do contato', id = 'faq' } = Astro.props;
+const {
+  items,
+  title = 'Perguntas frequentes',
+  eyebrow = 'Antes do contato',
+  id = 'faq',
+  text = 'Respostas diretas às dúvidas que costumam vir antes do diagnóstico.',
+} = Astro.props;
 ---
 <section class="section section--alt faq" id={id} aria-labelledby={`${id}-title`}>
   <div class="container faq__wrap">
     <div class="faq__head" data-reveal>
       <span class="eyebrow">{eyebrow}</span>
       <h2 id={`${id}-title`}>{title}</h2>
-      <p class="muted">Respostas diretas às dúvidas que costumam vir antes do diagnóstico.</p>
+      <p class="muted">{text}</p>
     </div>
     <div class="faq__list" data-reveal>
       {items.map((it) => (

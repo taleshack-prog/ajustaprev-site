@@ -23,7 +23,7 @@ Deploy: Vercel (configurado em `vercel.json`) ou qualquer host estático. Comand
 
 ## Pendências bloqueantes (antes de publicar)
 
-Tudo fica em **`src/data/site.ts`**. `scripts/prepublish-check.mjs` verifica cada item.
+Tudo fica em **`src/data/site.json`** (painel → Site → Configurações e contato). `scripts/prepublish-check.mjs` verifica cada item.
 
 | Item | Situação | Ação |
 | --- | --- | --- |
@@ -111,7 +111,15 @@ tests/              hero, a11y, seo, visual
 
 ## Painel de conteúdo (`/admin`)
 
-Sveltia CMS em `public/admin/`. Cria, edita e remove artigos sem abrir o código: cada "Salvar" vira um commit em `main` e a Vercel republica em ~1 minuto.
+Sveltia CMS em `public/admin/`. Edita sem abrir o código:
+
+- **Artigos** — `src/content/blog/*.md`
+- **Site → Página inicial** — `src/data/home.json` (abertura, seções, cenários, método, FAQ, chamada final)
+- **Site → Frentes de atuação** — `src/data/frentes.json` (cards da home e páginas `/solucoes/…`)
+- **Site → Página Sobre** — `src/data/sobre.json`
+- **Site → Configurações e contato** — `src/data/site.json` (e-mail, telefone, OAB, domínio, pendências)
+
+ cada "Salvar" vira um commit em `main` e a Vercel republica em ~1 minuto.
 
 **Acesso (uma vez por pessoa):**
 1. GitHub → Settings → Developer settings → Fine-grained tokens → *Generate new token*.
