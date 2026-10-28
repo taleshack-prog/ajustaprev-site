@@ -1,0 +1,125 @@
+# Painel de conteúdo — Sveltia CMS (compatível com a configuração do Decap CMS)
+# Docs: https://github.com/sveltia/sveltia-cms
+#
+# Cada artigo salvo vira um commit em `main`; a Vercel republica o site em ~1 min.
+# Os campos espelham o schema de src/content.config.ts — se mudar um, mude o outro.
+
+backend:
+  name: github
+  repo: taleshack-prog/ajustaprev-site
+  branch: main
+  commit_messages:
+    create: 'blog: novo artigo "{{slug}}"'
+    update: 'blog: atualiza "{{slug}}"'
+    delete: 'blog: remove "{{slug}}"'
+    uploadMedia: 'blog: envia imagem "{{path}}"'
+    deleteMedia: 'blog: remove imagem "{{path}}"'
+  # Login de pessoas não técnicas via GitHub (opcional): publique o worker
+  # https://github.com/sveltia/sveltia-cms-auth e descomente a linha abaixo.
+  # base_url: https://sveltia-cms-auth.<sua-conta>.workers.dev
+
+# Pasta global (exigida pelo CMS). Imagens de artigos usam a pasta da coleção, abaixo.
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: blog
+    label: Artigos
+    label_singular: Artigo
+    description: Artigos do blog. A URL do artigo é gerada a partir do título na criação e não muda depois.
+    folder: src/content/blog
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    identifier_field: title
+    summary: '{{title}} — {{category}} · {{date}}'
+    sortable_fields: [date, title, category]
+    view_filters:
+      - { label: Folha, field: category, pattern: Folha }
+      - { label: SAT/RAT, field: category, pattern: SAT/RAT }
+      - { label: Risco, field: category, pattern: Risco }
+      - { label: Judicial, field: category, pattern: Judicial }
+      - { label: Governança, field: category, pattern: Governança }
+      - { label: Rascunhos, field: draft, pattern: true }
+    # Imagens do artigo ficam ao lado dos .md, em src/content/blog/images/
+    media_folder: images
+    public_folder: ./images
+    fields:
+      - label: Título
+        name: title
+        widget: string
+        hint: Até 70 caracteres. Aparece no Google e no topo do artigo.
+        pattern: ['^.{5,70}$', 'O título precisa ter entre 5 e 70 caracteres.']
+
+      - label: Descrição
+        name: description
+        widget: text
+        hint: Até 160 caracteres. Resumo usado no Google, nos cards e nas redes.
+        pattern: ['^[\s\S]{20,160}$', 'A descrição precisa ter entre 20 e 160 caracteres.']
+
+      - label: Categoria
+        name: category
+        widget: select
+        options: [Folha, SAT/RAT, Risco, Judicial, Governança]
+
+      - label: Data de publicação
+        name: date
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+
+      - label: Atualizado em
+        name: updated
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+        required: false
+        hint: Preencha só quando revisar um artigo já publicado.
+
+      - label: Autor
+        name: author
+        widget: string
+        default: Equipe AJUSTAPREV
+
+      - label: Rascunho
+        name: draft
+        widget: boolean
+        default: false
+        hint: Rascunhos não aparecem no site publicado.
+
+      - label: Imagem de capa
+        name: cover
+        widget: image
+        required: false
+        hint: Opcional. Use imagens próprias ou licenciadas.
+
+      - label: Texto alternativo da capa
+        name: coverAlt
+        widget: string
+        required: false
+        hint: Descreva a imagem para leitores de tela. Obrigatório quando houver capa.
+
+      - label: Fontes
+        name: fontes
+        widget: list
+        required: false
+        summary: '{{fields.titulo}}'
+        hint: Normas e referências citadas. Aparecem no fim do artigo.
+        fields:
+          - { label: Título da fonte, name: titulo, widget: string }
+          - { label: Link, name: url, widget: string, required: false, pattern: ['^https?://', 'Use um link completo, começando com https://'] }
+
+      - label: URL canônica externa
+        name: canonical
+        widget: string
+        required: false
+        hint: Só para artigos republicados de outro site. Deixe em branco no caso normal.
+
+      - label: Texto do artigo
+        name: body
+        widget: markdown
+        hint: 'Comece com um parágrafo "Resposta direta:" que define o tema em poucas linhas.'

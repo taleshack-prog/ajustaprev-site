@@ -109,7 +109,22 @@ public/             fontes, favicons, og-home.jpg
 tests/              hero, a11y, seo, visual
 ```
 
-## Novo artigo
+## Painel de conteúdo (`/admin`)
+
+Sveltia CMS em `public/admin/`. Cria, edita e remove artigos sem abrir o código: cada "Salvar" vira um commit em `main` e a Vercel republica em ~1 minuto.
+
+**Acesso (uma vez por pessoa):**
+1. GitHub → Settings → Developer settings → Fine-grained tokens → *Generate new token*.
+2. Repository access: só `taleshack-prog/ajustaprev-site`. Permissions → Contents: **Read and write**. Validade: 90 dias.
+3. Abra `https://<seu-site>/admin/` → *Sign In Using Access Token* → cole o token.
+
+Para quem não usa GitHub, publique o worker de OAuth ([sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth)) no Cloudflare e preencha `base_url` em `public/admin/config.yml`; o login vira "Sign In with GitHub".
+
+Editar localmente sem token: `npm run dev`, abra `http://localhost:4321/admin/` no Chrome/Edge → *Work with Local Repository* → escolha a pasta do repositório (depois, `git commit` e `git push`).
+
+Regras: os campos do painel espelham `src/content.config.ts`; mudou um, mude o outro. A URL do artigo nasce do título na criação e não muda depois — renomear o arquivo quebra links. Imagens de artigos ficam em `src/content/blog/images/`.
+
+## Novo artigo (pelo código)
 
 Criar `src/content/blog/<slug>.md`:
 
