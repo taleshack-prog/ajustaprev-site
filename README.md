@@ -67,12 +67,18 @@ travessa (Λ) desenhado como chevron. Fica inline no HTML: nítido em qualquer d
 **Linha de obra do hero.** O TDD animava `top`; isso registrava CLS ≈ 0,1 (budget: 0,05). Agora um trilho com a
 altura do hero anima `translateY(-100%)` — mesmo efeito, sem JS de medição, CLS 0.
 
-**Sequência do hero (v2).** Torres "em construção" (clip-path + linha de obra, 2,8 s) → pausa de 0,9 s →
-dissolução em fumaça (WebGL, `src/scripts/smoke.ts`, 2,6 s) → escritório com a marca na parede
-(`src/assets/hero-escritorio.jpg`, imagem gerada com o logotipo composto por cima, não texto de IA).
-O shader emula `object-fit: cover` + `object-position`, então o 1º e o último quadro coincidem com os `<img>`
-e não há salto. Sem WebGL: fade CSS (`is-fading`). Sem JS ou com `prefers-reduced-motion`: escritório direto.
-Se só as torres falharem, vai ao escritório; se as duas falharem, `hero--no-media` (fundo de marca).
+**Sequência do hero (v3).** Tudo num shader WebGL (`src/scripts/hero-sequence.ts`), ~13,4 s:
+1. Construção (7 s): aparece a planta (contornos das torres em azul, Sobel sobre a foto); as torres sobem
+   andar por andar, cada coluna no seu ritmo, com linha de obra luminosa no topo; o andar recém-posto entra frio e
+   assenta na cor real.
+2. Pausa (1,2 s) com as torres prontas.
+3. Revelação (5,2 s): as torres ficam transparentes devagar e o escritório (`src/assets/hero-escritorio.jpg`,
+   imagem gerada com o logotipo composto por cima) sai do desfoque/escuro até ficar nítido.
+O shader emula `object-fit: cover` + `object-position`: o último quadro coincide com o `<img>`, sem salto.
+O relógio é acumulado por quadro (teto 100 ms): GPU lenta desacelera a animação em vez de pular etapas.
+Sem WebGL: clip-path em 28 degraus + fade com desfoque em CSS (`is-building` → `is-revealing`).
+Sem JS ou com `prefers-reduced-motion`: escritório direto. Só as torres falharem → escritório;
+as duas → `hero--no-media` (fundo de marca).
 
 **Torres como fundo de todas as seções.** `src/components/Backdrop.astro`: camada fixa (`z-index: -1`) com a mesma
 imagem do hero (vem do cache), opacidade 16 % e vinheta; seções passaram a ter fundo translúcido. Parallax leve só via
@@ -97,7 +103,7 @@ Sem cookies, analytics ou fontes de terceiros.
 | Métrica | Resultado | Budget |
 | --- | --- | --- |
 | Peso da home (transferido) | ~150 KB (com as duas imagens do hero em AVIF) | < 500 KB |
-| JS no first load | ~6 KB (hero + fumaça WebGL) | < 30 KB |
+| JS no first load | ~7 KB (hero + sequência WebGL) | < 30 KB |
 | CLS | 0 | < 0,05 |
 | axe WCAG 2.1 AA | 0 violações em 7 páginas | 0 |
 
@@ -108,7 +114,7 @@ LCP real deve ser medido no host final (Lighthouse CI / PageSpeed).
 ```
 src/
   assets/           hero-torres.png, hero-escritorio.jpg, wordmark.json (gerado)
-  scripts/          smoke.ts (dissolução em fumaça, WebGL 1)
+  scripts/          hero-sequence.ts (construção + revelação do hero, WebGL 1)
   components/       Hero, Backdrop (torres de fundo), Dores, Frentes, Cenarios (+ simulador RAT×FAP), Metodo, Faq, CtaFinal, …
   content/blog/     artigos .md (frontmatter validado em src/content.config.ts)
   data/             site.ts (configuração e pendências), content.ts (textos), categorias.ts
