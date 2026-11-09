@@ -67,6 +67,17 @@ travessa (Λ) desenhado como chevron. Fica inline no HTML: nítido em qualquer d
 **Linha de obra do hero.** O TDD animava `top`; isso registrava CLS ≈ 0,1 (budget: 0,05). Agora um trilho com a
 altura do hero anima `translateY(-100%)` — mesmo efeito, sem JS de medição, CLS 0.
 
+**Sequência do hero (v2).** Torres "em construção" (clip-path + linha de obra, 2,8 s) → pausa de 0,9 s →
+dissolução em fumaça (WebGL, `src/scripts/smoke.ts`, 2,6 s) → escritório com a marca na parede
+(`src/assets/hero-escritorio.jpg`, imagem gerada com o logotipo composto por cima, não texto de IA).
+O shader emula `object-fit: cover` + `object-position`, então o 1º e o último quadro coincidem com os `<img>`
+e não há salto. Sem WebGL: fade CSS (`is-fading`). Sem JS ou com `prefers-reduced-motion`: escritório direto.
+Se só as torres falharem, vai ao escritório; se as duas falharem, `hero--no-media` (fundo de marca).
+
+**Torres como fundo de todas as seções.** `src/components/Backdrop.astro`: camada fixa (`z-index: -1`) com a mesma
+imagem do hero (vem do cache), opacidade 16 % e vinheta; seções passaram a ter fundo translúcido. Parallax leve só via
+`animation-timeline: scroll()` (CSS puro), desligado com reduced-motion. Contraste revalidado no axe.
+
 **Organização no JSON-LD.** `ProfessionalService`. Se a prestação for por sociedade de advogados registrada,
 trocar para `LegalService` em `src/lib/schema.ts`.
 
@@ -85,8 +96,8 @@ Sem cookies, analytics ou fontes de terceiros.
 
 | Métrica | Resultado | Budget |
 | --- | --- | --- |
-| Peso da home (transferido) | ~95 KB | < 500 KB |
-| JS no first load | ~3 KB inline | < 30 KB |
+| Peso da home (transferido) | ~150 KB (com as duas imagens do hero em AVIF) | < 500 KB |
+| JS no first load | ~6 KB (hero + fumaça WebGL) | < 30 KB |
 | CLS | 0 | < 0,05 |
 | axe WCAG 2.1 AA | 0 violações em 7 páginas | 0 |
 
@@ -96,8 +107,9 @@ LCP real deve ser medido no host final (Lighthouse CI / PageSpeed).
 
 ```
 src/
-  assets/           hero-torres.png, wordmark.json (gerado)
-  components/       Hero, Dores, Frentes, Cenarios (+ simulador RAT×FAP), Metodo, Faq, CtaFinal, …
+  assets/           hero-torres.png, hero-escritorio.jpg, wordmark.json (gerado)
+  scripts/          smoke.ts (dissolução em fumaça, WebGL 1)
+  components/       Hero, Backdrop (torres de fundo), Dores, Frentes, Cenarios (+ simulador RAT×FAP), Metodo, Faq, CtaFinal, …
   content/blog/     artigos .md (frontmatter validado em src/content.config.ts)
   data/             site.ts (configuração e pendências), content.ts (textos), categorias.ts
   layouts/Base.astro  SEO, OG, JSON-LD @graph, header/footer

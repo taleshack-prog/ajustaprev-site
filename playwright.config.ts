@@ -16,7 +16,7 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
   ],
   webServer: {
-    command: 'npm run build:force && npx astro preview --port 4321',
+    command: 'npm run build:force && npx astro preview --port 4321 --ignore-lock',
     url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

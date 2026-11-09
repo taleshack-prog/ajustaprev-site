@@ -1,0 +1,52 @@
+---
+/**
+ * Torres como fundo fixo de todas as seções (atrás do conteúdo, z-index -1).
+ * Mesma imagem e mesmos tamanhos do hero: o navegador reaproveita o arquivo do cache.
+ * Presença baixa (≈16%) para não competir com o texto; parallax leve só onde há
+ * scroll-driven animations (CSS puro, sem JS) e nunca com reduced-motion.
+ */
+import { Picture } from 'astro:assets';
+import torres from '../assets/hero-torres.png';
+---
+<div class="backdrop" aria-hidden="true">
+  <Picture
+    src={torres}
+    formats={['avif', 'webp']}
+    widths={[480, 720, 896]}
+    fallbackFormat="webp"
+    sizes="(max-width: 960px) 100vw, 60vw"
+    alt=""
+    class="backdrop__img"
+    loading="lazy"
+    fetchpriority="low"
+    decoding="async"
+  />
+</div>
+
+<style>
+  .backdrop {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+  }
+  .backdrop :global(picture) { position: absolute; inset: 0; }
+  .backdrop :global(.backdrop__img) {
+    position: absolute; left: 0; top: 0; width: 100%; height: 118%;
+    object-fit: cover; object-position: 50% 30%;
+    opacity: 0.16; filter: saturate(0.6) contrast(1.05);
+  }
+  /* Vinheta: as torres aparecem no miolo da tela e somem nas bordas. */
+  .backdrop::after {
+    content: ''; position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom, var(--night) 0%, rgba(10,20,36,0) 22%, rgba(10,20,36,0) 72%, var(--night) 100%),
+      radial-gradient(120% 90% at 70% 45%, rgba(10,20,36,0) 30%, rgba(10,20,36,.85) 100%);
+  }
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .backdrop :global(.backdrop__img) {
+        animation: backdropDrift linear both;
+        animation-timeline: scroll(root);
+      }
+      @keyframes backdropDrift { from { transform: translateY(0); } to { transform: translateY(-15%); } }
+    }
+  }
+</style>

@@ -48,8 +48,9 @@ strong { color: var(--text-strong); font-weight: 600; }
 /* ---------- Layout ---------- */
 .container { width: 100%; max-width: calc(var(--maxw) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
 .section { padding-block: var(--space-section); position: relative; }
-.section--alt { background: var(--bg-alt); }
-.section--deep { background: var(--bg-deep); }
+/* Seções translúcidas: as torres fixas (Backdrop) aparecem por trás. */
+.section--alt { background: rgba(15, 36, 63, 0.78); }
+.section--deep { background: rgba(5, 9, 15, 0.7); }
 .section--line { border-top: 1px solid var(--line); }
 
 .section-head { max-width: 720px; margin-bottom: clamp(40px, 5vw, 64px); }

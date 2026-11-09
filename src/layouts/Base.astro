@@ -3,6 +3,7 @@ import '../styles/fonts.css';
 import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Backdrop from '../components/Backdrop.astro';
 import { SITE } from '../data/site';
 import { graph } from '../lib/schema';
 
@@ -74,6 +75,7 @@ const jsonLd = JSON.stringify(graph(...schema)).replace(/</g, '\\u003c');
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+    <Backdrop />
     <Header />
     <main id="conteudo" tabindex="-1">
       <slot />

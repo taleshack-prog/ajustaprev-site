@@ -1,20 +1,38 @@
 ---
 /**
  * Hero em camadas (TDD §3.4–3.6):
- *   z0 .hero__media  imagem + brilho     ← anima clip-path (construção de baixo para cima)
+ *   z0 .hero__media  escritório + torres + canvas  ← anima clip-path (construção de baixo para cima)
  *   z1 .hero__scrim  degradês            ← legibilidade
  *   z2 .hero__edge   linha de obra       ← sobe com a frente de revelação
  *   z3 .hero__content texto              ← entra escalonado
- * Fallback obrigatório: se a imagem falhar, .hero--no-media pinta um fundo
- * de marca — o hero nunca fica vazio.
+ *
+ * Sequência: torres se constroem (2,8 s) → pausa → dissolvem em fumaça (WebGL,
+ * src/scripts/smoke.ts) → resta o escritório. Estados no .hero:
+ *   is-building → is-smoking → is-office
+ * Sem WebGL: as torres somem num fade com desfoque. Com reduced-motion ou sem JS:
+ * o escritório aparece direto. Se as duas imagens falharem, .hero--no-media pinta
+ * um fundo de marca — o hero nunca fica vazio.
  */
 import { Picture } from 'astro:assets';
 import torres from '../assets/hero-torres.png';
+import escritorio from '../assets/hero-escritorio.jpg';
 import { HOME } from '../data/content';
 const h = HOME.hero;
 ---
 <section class="hero" id="hero" aria-labelledby="hero-title">
   <div class="hero__media" aria-hidden="true">
+    <Picture
+      src={escritorio}
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1440, 1920]}
+      fallbackFormat="jpg"
+      sizes="(max-width: 960px) 100vw, 62vw"
+      alt=""
+      class="hero__office"
+      loading="eager"
+      fetchpriority="low"
+      decoding="async"
+    />
     <Picture
       src={torres}
       formats={['avif', 'webp']}
@@ -27,6 +45,7 @@ const h = HOME.hero;
       fetchpriority="high"
       decoding="async"
     />
+    <canvas class="hero__smoke"></canvas>
     <div class="hero__glow"></div>
   </div>
   <div class="hero__scrim" aria-hidden="true"></div>
@@ -65,11 +84,31 @@ const h = HOME.hero;
     position: absolute; z-index: 0; top: 0; bottom: 0; right: 0; left: 38%;
     clip-path: inset(100% 0 0 0);
   }
-  .hero__media :global(picture),
-  .hero__media :global(.hero__img) { width: 100%; height: 100%; }
+  .hero__media :global(picture) { position: absolute; inset: 0; }
+  .hero__media :global(.hero__img),
+  .hero__media :global(.hero__office) { width: 100%; height: 100%; object-fit: cover; }
   .hero__media :global(.hero__img) {
-    object-fit: cover; object-position: 50% 30%;
+    position: relative; z-index: 1;
+    object-position: 50% 30%;
     transform: scale(1.06); transform-origin: 50% 100%;
+  }
+  /* O logo da parede ocupa 59–82% da largura da foto: enquadrar à direita. */
+  .hero__media :global(.hero__office) { object-position: 96% 40%; }
+  .hero__smoke {
+    position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%;
+    opacity: 0; pointer-events: none;
+  }
+  .hero.is-smoking .hero__smoke { opacity: 1; }
+  .hero.is-smoking .hero__media :global(.hero__img),
+  .hero.is-office .hero__media :global(.hero__img) { visibility: hidden; }
+  .hero.is-office .hero__smoke { display: none; }
+
+  /* Fallback sem WebGL: as torres se desfazem com desfoque e sobem. */
+  .hero.is-building.is-fading .hero__media :global(.hero__img) {
+    animation: towersFade 1.8s var(--ease-build) forwards;
+  }
+  @keyframes towersFade {
+    to { opacity: 0; filter: blur(14px) brightness(1.3); transform: translateY(-3%) scale(1.02); }
   }
   .hero__glow {
     position: absolute; inset: 0; opacity: 0; pointer-events: none;
@@ -80,7 +119,7 @@ const h = HOME.hero;
   .hero__scrim {
     position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
-      linear-gradient(100deg, var(--night) 0%, var(--night) 36%, rgba(10,20,36,.86) 46%, rgba(10,20,36,.42) 60%, rgba(10,20,36,.12) 78%, rgba(10,20,36,.05) 100%),
+      linear-gradient(100deg, var(--night) 0%, var(--night) 34%, rgba(10,20,36,.82) 44%, rgba(10,20,36,.32) 55%, rgba(10,20,36,.08) 68%, rgba(10,20,36,.02) 100%),
       linear-gradient(to top, rgba(10,20,36,.95) 0%, rgba(10,20,36,0) 34%),
       linear-gradient(to bottom, rgba(10,20,36,.7) 0%, rgba(10,20,36,0) 18%);
   }
@@ -156,9 +195,9 @@ const h = HOME.hero;
   .hero.is-ready .hero__services { animation-delay: 900ms; }
   @keyframes riseIn { to { opacity: 1; transform: none; } }
 
-  /* Sem JS a imagem precisa aparecer: o clip só existe com .js */
+  /* Sem JS: estado final (escritório), sem clip. */
   :global(html:not(.js)) .hero__media { clip-path: none; }
-  :global(html:not(.js)) .hero__media :global(.hero__img) { transform: none; }
+  :global(html:not(.js)) .hero__media :global(.hero__img) { display: none; }
 
   /* Fallback de mídia */
   .hero.hero--no-media .hero__media, .hero.hero--no-media .hero__edge { display: none; }
@@ -172,10 +211,14 @@ const h = HOME.hero;
   /* ---------- Responsivo ---------- */
   @media (max-width: 960px) {
     .hero { min-height: auto; }
-    .hero__media, .hero__edge { left: 0; }
+    /* No celular a imagem fica só no topo, acima do texto: o logo da parede não
+       pode cair atrás do título. */
+    .hero__media, .hero__edge { left: 0; bottom: auto; height: var(--hero-media-h); }
+    .hero { --hero-media-h: 480px; }
     .hero__media :global(.hero__img) { object-position: 50% 22%; }
+    .hero__media :global(.hero__office) { object-position: 88% 30%; }
     .hero__scrim {
-      background: linear-gradient(to bottom, rgba(10,20,36,.55) 0%, rgba(10,20,36,.25) 18%, rgba(10,20,36,.55) 36%, rgba(10,20,36,.9) 54%, var(--night) 72%);
+      background: linear-gradient(to bottom, rgba(10,20,36,.55) 0, rgba(10,20,36,.12) 96px, rgba(10,20,36,.25) 220px, rgba(10,20,36,.82) 330px, var(--night) var(--hero-media-h));
     }
     .hero__grid { display: none; }
     /* Torres visíveis no terço superior; texto ancorado embaixo. */
@@ -188,35 +231,85 @@ const h = HOME.hero;
   /* ---------- Movimento reduzido ---------- */
   @media (prefers-reduced-motion: reduce) {
     .hero__media { clip-path: none !important; animation: none !important; }
-    .hero__media :global(.hero__img) { transform: none !important; animation: none !important; }
+    .hero__media :global(.hero__img) { display: none !important; }
     .hero__edge, .hero__glow { display: none !important; }
     :global(.js) .hero__content > *, :global(.js) .hero__services { opacity: 1 !important; transform: none !important; animation: none !important; }
   }
 </style>
 
 <script>
+  import { runSmoke } from '../scripts/smoke';
+
+  const BUILD_MS = 2800; // = --dur-build
+  const HOLD_MS = 900;   // torres prontas, antes da fumaça
+  const SMOKE_MS = 2600;
+
   const hero = document.getElementById('hero');
   if (hero) {
-    const img = hero.querySelector<HTMLImageElement>('.hero__img');
-    const fail = () => hero.classList.add('hero--no-media');
-    if (!img) fail();
-    else if (img.complete && img.naturalWidth === 0) fail(); // falhou antes do script rodar
-    else img.addEventListener('error', fail, { once: true });
-
+    const towers = hero.querySelector<HTMLImageElement>('.hero__img');
+    const office = hero.querySelector<HTMLImageElement>('.hero__office');
+    const canvas = hero.querySelector<HTMLCanvasElement>('.hero__smoke');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const start = () => hero.classList.add('is-building', 'is-ready');
+
+    const loaded = (img: HTMLImageElement | null) =>
+      new Promise<boolean>((res) => {
+        if (!img) return res(false);
+        if (img.complete) return res(img.naturalWidth > 0);
+        img.addEventListener('load', () => res(true), { once: true });
+        img.addEventListener('error', () => res(false), { once: true });
+      });
+    const towersOk = loaded(towers);
+    const officeOk = loaded(office);
+
+    const toOffice = () => {
+      hero.classList.remove('is-smoking', 'is-fading');
+      hero.classList.add('is-office');
+    };
+
+    // Fallback de mídia: só quando as duas imagens falham.
+    Promise.all([towersOk, officeOk]).then(([t, o]) => {
+      if (!t && !o) hero.classList.add('hero--no-media');
+      else if (!t) toOffice();
+    });
 
     if (reduce) {
-      hero.classList.add('is-ready');
+      hero.classList.add('is-ready', 'is-office');
     } else {
-      // Começa quando a imagem decodifica (sem "construir" um vazio) ou em 700ms.
+      // A construção começa quando as torres decodificam (sem "construir" um vazio) ou em 700 ms.
       let started = false;
-      const go = () => { if (!started) { started = true; start(); } };
-      if (img && !img.complete) {
-        img.addEventListener('load', go, { once: true });
-        img.addEventListener('error', go, { once: true });
-      } else go();
-      setTimeout(go, 700);
+      const start = () => {
+        if (started) return;
+        started = true;
+        hero.classList.add('is-building', 'is-ready');
+        setTimeout(dissolve, BUILD_MS + HOLD_MS);
+      };
+      towersOk.then(start);
+      setTimeout(start, 700);
+
+      const pos = (img: HTMLImageElement): [number, number] => {
+        const [x, y] = getComputedStyle(img).objectPosition.split(' ').map((v) => parseFloat(v) / 100);
+        return [isFinite(x) ? x : 0.5, isFinite(y) ? y : 0.5];
+      };
+
+      async function dissolve() {
+        const [t, o] = await Promise.all([towersOk, officeOk]);
+        if (!t || !o || !towers || !office || !canvas) return; // sem par de imagens, fica o que houver
+        await Promise.all([towers.decode().catch(() => {}), office.decode().catch(() => {})]);
+        const ok = runSmoke({
+          canvas,
+          towers,
+          office,
+          towersPos: pos(towers),
+          officePos: pos(office),
+          duration: SMOKE_MS,
+          onFirstFrame: () => hero!.classList.add('is-smoking'),
+          onDone: toOffice,
+        });
+        if (!ok) {
+          hero!.classList.add('is-fading');
+          towers.addEventListener('animationend', toOffice, { once: true });
+        }
+      }
     }
   }
 </script>
