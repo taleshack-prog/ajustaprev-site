@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 const PAGES = [
   '/',
   '/blog/',
-  '/blog/fap-2027-contestacao/',
+  '/blog/fap-o-que-e/',
   '/solucoes/sat-rat/',
   '/contato/',
   '/sobre/',
