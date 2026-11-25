@@ -67,11 +67,11 @@ travessa (Λ) desenhado como chevron. Fica inline no HTML: nítido em qualquer d
 **Linha de obra do hero.** O TDD animava `top`; isso registrava CLS ≈ 0,1 (budget: 0,05). Agora um trilho com a
 altura do hero anima `translateY(-100%)` — mesmo efeito, sem JS de medição, CLS 0.
 
-**Sequência do hero (v3).** Tudo num shader WebGL (`src/scripts/hero-sequence.ts`), ~13,4 s:
+**Sequência do hero (v3).** Tudo num shader WebGL (`src/scripts/hero-sequence.ts`), ~12,4 s:
 1. Construção (7 s): aparece a planta (contornos das torres em azul, Sobel sobre a foto); as torres sobem
    andar por andar, cada coluna no seu ritmo, com linha de obra luminosa no topo; o andar recém-posto entra frio e
    assenta na cor real.
-2. Pausa (1,2 s) com as torres prontas.
+2. Pausa curta (0,15 s) com as torres prontas.
 3. Revelação (5,2 s): as torres ficam transparentes devagar e o escritório (`src/assets/hero-escritorio.jpg`,
    imagem gerada com o logotipo composto por cima) sai do desfoque/escuro até ficar nítido.
 O shader emula `object-fit: cover` + `object-position`: o último quadro coincide com o `<img>`, sem salto.

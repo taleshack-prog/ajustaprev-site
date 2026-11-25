@@ -92,7 +92,7 @@ void main() {
     // cada coluna sobe no seu ritmo (ruído de baixa e média frequência em x)
     float jag = (noise(vec2(uv.x * 6.0, 3.1)) - 0.5) * 0.18
               + (noise(vec2(uv.x * 21.0, 8.7)) - 0.5) * 0.05;
-    float H = b * 1.2 - 0.1 + jag * (1.0 - b);  // altura construída nesta coluna
+    float H = b * 1.12 - 0.12 + jag * (1.0 - b); // último andar fecha exatamente no fim da obra  // altura construída nesta coluna
     float built = step(fl, H);                    // o andar entra inteiro
     float age = clamp((H - fl) / 0.14, 0.0, 1.0); // 0 = recém-posto, 1 = assentado
 
@@ -120,7 +120,8 @@ void main() {
     vec2 q = vec2(uv.x * aspect, uv.y);
     float n = fbm(q * 1.7 + vec2(0.0, uTime * 0.04));
     // transparência das torres, irregular no meio e exata nas pontas
-    float a = 1.0 - smoothstep(0.0, 1.0, r + (n - 0.5) * 0.55 * sin(3.14159 * r));
+    // sem segunda suavização: a transparência começa a aparecer logo no início
+    float a = 1.0 - clamp(r + (n - 0.5) * 0.55 * sin(3.14159 * r), 0.0, 1.0);
     vec3 tw = mix(towers, vec3(luma(towers)) * vec3(0.86, 0.93, 1.08), (1.0 - a) * 0.6);
 
     // escritório: desfoque que diminui até zero (disco com 24 amostras)
@@ -139,7 +140,7 @@ void main() {
     } else {
       off = texture2D(uOffice, cover(uv, uOfficeSize, uOfficePos, uOfficeScale)).rgb;
     }
-    float lit = mix(0.28, 1.0, smoothstep(0.0, 0.92, r));
+    float lit = mix(0.5, 1.0, smoothstep(0.0, 0.92, r));
     float sat = mix(0.35, 1.0, smoothstep(0.1, 0.95, r));
     off = mix(vec3(luma(off)), off, sat) * lit;
 
@@ -183,7 +184,7 @@ function texture(gl: WebGLRenderingContext, unit: number, img: HTMLImageElement)
   return t;
 }
 
-const easeInOutSine = (x: number) => -(Math.cos(Math.PI * x) - 1) / 2;
+const easeOutQuad = (x: number) => 1 - (1 - x) * (1 - x);
 const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 
 export function runHeroSequence(o: SequenceOptions): boolean {
@@ -262,7 +263,8 @@ export function runHeroSequence(o: SequenceOptions): boolean {
     last = now;
 
     const build = clamp01(t / o.build);
-    const reveal = easeInOutSine(clamp01((t - o.build - o.hold) / o.reveal));
+    // começa visível de imediato e desacelera ao entrar em foco
+    const reveal = easeOutQuad(clamp01((t - o.build - o.hold) / o.reveal));
     const settle = clamp01(t / (o.build + o.hold));
 
     resize();
