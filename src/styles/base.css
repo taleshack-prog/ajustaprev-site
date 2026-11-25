@@ -153,7 +153,7 @@ strong { color: var(--text-strong); font-weight: 600; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.5em 0; }
 
 /* ---------- Formulários ---------- */
-.field { display: grid; gap: 8px; }
+.field { display: grid; gap: 8px; align-content: start; } /* campos sem linha de erro não esticam */
 .field label, .field legend { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; color: var(--text-strong); }
 .field .hint { font-size: 0.8rem; color: var(--text-muted); }
 .input {

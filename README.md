@@ -28,7 +28,7 @@ Tudo fica em **`src/data/site.json`** (painel → Site → Configurações e con
 | Item | Situação | Ação |
 | --- | --- | --- |
 | Domínio | `www.ajustaprev.com.br` marcado PENDENTE | Confirmar DNS e remover o comentário |
-| E-mail | `luiz@ajustaprev.com.br` (do cartão) | Confirmar ou trocar |
+| E-mail | `advcburnett@gmail.com` (provisório) | Trocar pelo e-mail do domínio quando contratado |
 | Telefone | O cartão traz placeholder `(61) 99999-9999` | Preencher `phone` e `phoneHref`; enquanto `null`, não aparece |
 | Identificação profissional | Vazia | Se a comunicação for de advocacia, preencher `legal.responsibleName` + `legal.oab` ou `legal.society` (Provimento CFOAB 205/2021) |
 | Conteúdo jurídico | 4 artigos e textos institucionais | Revisão pelo responsável técnico |
