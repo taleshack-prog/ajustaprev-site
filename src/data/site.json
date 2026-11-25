@@ -23,6 +23,6 @@
   },
   "pendencias": {
     "emailConfirmado": false,
-    "dominioConfirmado": false
+    "dominioConfirmado": true
   }
 }
